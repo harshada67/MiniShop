@@ -170,28 +170,53 @@ export class CheckoutComponent implements OnInit {
   // NG ON INIT
   // ==========================================
 
-  ngOnInit(): void {
+ ngOnInit(): void {
 
-    // ==========================================
-    // LOAD CART
-    // ==========================================
+  const buyNowItem = sessionStorage.getItem(
+    'minishop_buy_now_item'
+  );
 
+  if (buyNowItem) {
+
+    try {
+
+      const selectedItem: CartItem =
+        JSON.parse(buyNowItem);
+
+      // Checkout only the selected product
+      this.cartItems = [selectedItem];
+
+      console.log(
+        '🛒 Buy Now Checkout Item:',
+        selectedItem
+      );
+
+    } catch (error) {
+
+      console.error(
+        'Unable to read Buy Now item:',
+        error
+      );
+
+      // Fallback to normal cart checkout
+      this.cartItems =
+        this.cartStateService.getCart();
+    }
+
+  } else {
+
+    // Normal Checkout All
     this.cartItems =
       this.cartStateService.getCart();
 
     console.log(
-      'Checkout Cart:',
+      '🛒 Checkout All Cart:',
       this.cartItems
     );
-
-
-    // ==========================================
-    // LOAD CMS FIRST
-    // ==========================================
-
-    this.loadCheckoutContent();
-
   }
+
+  this.loadCheckoutContent();
+}
 
 
   // ==========================================
@@ -737,34 +762,80 @@ export class CheckoutComponent implements OnInit {
     // SAVE ORDER
     // ==========================================
 
-    this.orderService.addOrder(
-      order
+this.orderService.addOrder(order);
+
+this.orderPlaced = true;
+
+sessionStorage.removeItem(
+  'minishop_checkout_data'
+);
+
+// Check whether this was Buy Now or Checkout All
+const buyNowItem = sessionStorage.getItem(
+  'minishop_buy_now_item'
+);
+
+if (buyNowItem) {
+
+  try {
+
+    const selectedItem: CartItem =
+      JSON.parse(buyNowItem);
+
+    console.log(
+      '🛒 Removing only Buy Now item from cart:',
+      selectedItem
     );
 
+    // Get current complete cart
+    const currentCart =
+      this.cartStateService.getCart();
 
-    // ==========================================
-    // SHOW SUCCESS
-    // ==========================================
+    // Remove only the selected product
+    const updatedCart =
+      currentCart.filter(
+        item =>
+          item.product.id !== selectedItem.product.id
+      );
 
-    this.orderPlaced = true;
+    console.log(
+      '🛒 Remaining cart after Buy Now:',
+      updatedCart
+    );
 
+    // Update Shell CartStateService
+    window.dispatchEvent(
+      new CustomEvent(
+        'cart-local-update',
+        {
+          detail: updatedCart
+        }
+      )
+    );
 
-    // ==========================================
-    // CLEAR CHECKOUT DATA
-    // ==========================================
-
+    // Clear Buy Now selection
     sessionStorage.removeItem(
-      'minishop_checkout_data'
+      'minishop_buy_now_item'
     );
 
+  } catch (error) {
 
-    // ==========================================
-    // CLEAR CART
-    // ==========================================
+    console.error(
+      'Unable to process Buy Now cart update:',
+      error
+    );
 
-    this.cartStateService.clearCart();
+    // Fallback
+    sessionStorage.removeItem(
+      'minishop_buy_now_item'
+    );
+  }
 
+} else {
 
+  // Normal Checkout All
+  this.cartStateService.clearCart();
+}
     console.log(
       'Order placed successfully:',
       order

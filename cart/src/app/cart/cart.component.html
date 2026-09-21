@@ -95,14 +95,14 @@
         </div>
 
 
-        <!-- CART ITEM -->
+        <!-- ==================== CART ITEM ==================== -->
 
         <div
           class="cart-item-card"
           *ngFor="let item of cartItems"
         >
 
-          <!-- Product Image -->
+          <!-- ==================== PRODUCT IMAGE ==================== -->
 
           <div class="product-image-wrapper">
 
@@ -115,22 +115,28 @@
           </div>
 
 
-          <!-- Product Details -->
+          <!-- ==================== PRODUCT DETAILS ==================== -->
 
           <div class="product-details">
 
             <span class="product-category">
+
               {{ item.product.category }}
+
             </span>
 
             <h3 class="product-title">
+
               {{ item.product.title }}
+
             </h3>
 
             <div class="product-price">
 
               <span>
+
                 {{ finalContent?.['summary']?.['currency'] }}
+
               </span>
 
               {{ item.product.price | number }}
@@ -152,7 +158,7 @@
           </div>
 
 
-          <!-- Quantity -->
+          <!-- ==================== QUANTITY ==================== -->
 
           <div class="quantity-section">
 
@@ -178,7 +184,9 @@
               </button>
 
               <span class="quantity-value">
+
                 {{ item.quantity }}
+
               </span>
 
               <button
@@ -199,7 +207,7 @@
           </div>
 
 
-          <!-- Item Total -->
+          <!-- ==================== ITEM TOTAL ==================== -->
 
           <div class="item-total-section">
 
@@ -212,7 +220,9 @@
             <strong class="item-total">
 
               <span>
+
                 {{ finalContent?.['summary']?.['currency'] }}
+
               </span>
 
               {{ getItemTotal(item) | number }}
@@ -222,7 +232,24 @@
           </div>
 
 
-          <!-- Remove -->
+          <!-- ==================== BUY NOW ==================== -->
+
+          <div class="buy-now-section">
+
+            <button
+              type="button"
+              class="buy-now-btn"
+              (click)="buyNow(item)"
+            >
+
+              Buy Now
+
+            </button>
+
+          </div>
+
+
+          <!-- ==================== REMOVE ==================== -->
 
           <button
             type="button"
@@ -242,7 +269,7 @@
         </div>
 
 
-        <!-- Continue Shopping -->
+        <!-- ==================== CONTINUE SHOPPING ==================== -->
 
         <div class="continue-shopping">
 
@@ -274,7 +301,7 @@
           </h2>
 
 
-          <!-- Items -->
+          <!-- ==================== ITEMS ==================== -->
 
           <div class="summary-row">
 
@@ -297,7 +324,7 @@
           </div>
 
 
-          <!-- Subtotal -->
+          <!-- ==================== SUBTOTAL ==================== -->
 
           <div class="summary-row">
 
@@ -318,7 +345,7 @@
           </div>
 
 
-          <!-- Shipping -->
+          <!-- ==================== SHIPPING ==================== -->
 
           <div class="summary-row">
 
@@ -340,7 +367,7 @@
           <div class="summary-divider"></div>
 
 
-          <!-- Total -->
+          <!-- ==================== TOTAL ==================== -->
 
           <div class="summary-total">
 
@@ -361,7 +388,7 @@
           </div>
 
 
-          <!-- Checkout -->
+          <!-- ==================== CHECKOUT ==================== -->
 
           <button
             type="button"
@@ -374,7 +401,7 @@
           </button>
 
 
-          <!-- Secure Checkout -->
+          <!-- ==================== SECURE CHECKOUT ==================== -->
 
           <div class="secure-checkout">
 
@@ -403,7 +430,7 @@
           </div>
 
 
-          <!-- Benefits -->
+          <!-- ==================== BENEFITS ==================== -->
 
           <div class="checkout-benefits">
 

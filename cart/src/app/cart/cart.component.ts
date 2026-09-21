@@ -596,16 +596,34 @@ export class CartComponent implements OnInit, OnDestroy {
     );
   }
 
+  buyNow(item: CartItem): void {
+  console.log('🛒 Buy Now clicked:', item);
+
+  // Store only the selected product for Buy Now checkout
+  sessionStorage.setItem(
+    'minishop_buy_now_item',
+    JSON.stringify(item)
+  );
+
+  this.router.navigate([
+    '/checkout'
+  ]);
+}
   // ==========================================
   // CHECKOUT
   // ==========================================
 
-  goToCheckout(): void {
+ goToCheckout(): void {
+  // Remove any previous Buy Now selection
+  // so normal checkout always means "Checkout All".
+  sessionStorage.removeItem('minishop_buy_now_item');
 
-    this.router.navigate([
-      '/checkout'
-    ]);
-  }
+  this.router.navigate([
+    '/checkout'
+  ]);
+}
+
+
 
   // ==========================================
   // DESTROY
