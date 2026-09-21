@@ -58,35 +58,31 @@ export class CartStateService {
     // LOAD CURRENT USER CART
     // ==========================================
 
-    /*
-     * AuthService is required to identify the
-     * currently logged-in user.
-     *
-     * Therefore the cart is loaded inside the
-     * constructor instead of field initialization.
-     */
-
     this.cartSubject.next(
       this.loadCart()
     );
 
 
-    // Products Remote → Shell
+    // ==========================================
+    // PRODUCTS REMOTE -> SHELL
+    // ==========================================
+
     window.addEventListener(
       'add-to-cart',
       this.handleAddToCart
     );
 
 
-    // Cart Remote → Shell
+    // ==========================================
+    // CART REMOTE -> SHELL
+    // ==========================================
+
     window.addEventListener(
       'request-cart',
       this.handleCartRequest
     );
 
 
-    // Cart Remote → Shell
-    // Receives complete updated cart
     window.addEventListener(
       'cart-local-update',
       this.handleLocalCartUpdate
@@ -94,13 +90,18 @@ export class CartStateService {
 
 
     // ==========================================
-    // SEND INITIAL CART
+    // USER LOGIN / LOGOUT
     // ==========================================
 
-    /*
-     * Cart Remote can receive the currently
-     * logged-in user's restored cart.
-     */
+    window.addEventListener(
+      'auth-user-changed',
+      this.handleUserChanged
+    );
+
+
+    // ==========================================
+    // SEND INITIAL CART
+    // ==========================================
 
     this.sendCartUpdate();
 
@@ -108,7 +109,7 @@ export class CartStateService {
 
 
   // ==========================================
-  // GET CURRENT USER STORAGE KEY
+  // CURRENT USER STORAGE KEY
   // ==========================================
 
   private getStorageKey(): string | null {
@@ -149,9 +150,7 @@ export class CartStateService {
       this.getStorageKey();
 
 
-    // ==========================================
-    // NO LOGGED-IN USER
-    // ==========================================
+    // No logged-in user
 
     if (!storageKey) {
 
@@ -177,7 +176,6 @@ export class CartStateService {
     );
 
 
-    // Nothing saved
     if (!savedCart) {
 
       console.log(
@@ -246,10 +244,7 @@ export class CartStateService {
       this.getStorageKey();
 
 
-    /*
-     * Do not save a shared cart when there is
-     * no logged-in user.
-     */
+    // Don't save shared cart
 
     if (!storageKey) {
 
@@ -279,103 +274,135 @@ export class CartStateService {
 
 
   // ==========================================
-  // ADD PRODUCT TO CART
+  // USER CHANGED
   // ==========================================
 
-  private handleAddToCart =
-    (event: Event): void => {
+  private handleUserChanged = (): void => {
 
-      // ========================================
-      // LOGIN CHECK
-      // ========================================
-
-      if (!this.authService.isLoggedIn()) {
-
-        console.warn(
-          'Cannot add product. User is not logged in.'
-        );
-
-        return;
-
-      }
+    console.log(
+      '🔄 Current user changed. Reloading cart...'
+    );
 
 
-      const customEvent =
-        event as CustomEvent<Product>;
+    const userCart =
+      this.loadCart();
 
 
-      const product =
-        customEvent.detail;
+    this.cartSubject.next(
+      userCart
+    );
 
 
-      if (!product) {
-        return;
-      }
+    // Send new user's cart to Cart Remote
+
+    this.sendCartUpdate();
+
+  };
 
 
-      console.log(
-        '🔥 ADD TO CART EVENT RECEIVED:',
-        product
+  // ==========================================
+  // ADD TO CART
+  // ==========================================
+
+  private handleAddToCart = (
+    event: Event
+  ): void => {
+
+    // User must be logged in
+
+    if (!this.authService.isLoggedIn()) {
+
+      console.warn(
+        'Cannot add product. User is not logged in.'
+      );
+
+      return;
+
+    }
+
+
+    const customEvent =
+      event as CustomEvent<Product>;
+
+
+    const product =
+      customEvent.detail;
+
+
+    if (!product) {
+
+      return;
+
+    }
+
+
+    console.log(
+      '🔥 ADD TO CART EVENT RECEIVED:',
+      product
+    );
+
+
+    const currentCart =
+      [
+        ...this.cartSubject.value
+      ];
+
+
+    const existingItem =
+      currentCart.find(
+        item =>
+          item.product.id ===
+          product.id
       );
 
 
-      const currentCart =
-        this.cartSubject.value;
+    let updatedCart: CartItem[];
 
 
-      const existingItem =
-        currentCart.find(
-          item =>
-            item.product.id === product.id
-        );
+    if (existingItem) {
 
+      // Same product -> increase quantity
 
-      let updatedCart: CartItem[];
+      updatedCart =
+        currentCart.map(item => {
 
+          if (
+            item.product.id ===
+            product.id
+          ) {
 
-      // Product already exists
-      if (existingItem) {
+            return {
+              ...item,
+              quantity:
+                item.quantity + 1
+            };
 
-        updatedCart =
-          currentCart.map(item => {
+          }
 
-            if (
-              item.product.id === product.id
-            ) {
+          return item;
 
-              return {
-                ...item,
-                quantity:
-                  item.quantity + 1
-              };
+        });
 
-            }
-
-            return item;
-
-          });
-
-      }
+    } else {
 
       // New product
-      else {
 
-        updatedCart = [
-          ...currentCart,
-          {
-            product: product,
-            quantity: 1
-          }
-        ];
+      updatedCart = [
+        ...currentCart,
+        {
+          product: product,
+          quantity: 1
+        }
+      ];
 
-      }
+    }
 
 
-      this.updateCart(
-        updatedCart
-      );
+    this.updateCart(
+      updatedCart
+    );
 
-    };
+  };
 
 
   // ==========================================
@@ -402,9 +429,7 @@ export class CartStateService {
   private handleLocalCartUpdate =
     (event: Event): void => {
 
-      // ========================================
-      // LOGIN CHECK
-      // ========================================
+      // User must be logged in
 
       if (!this.authService.isLoggedIn()) {
 
@@ -426,7 +451,9 @@ export class CartStateService {
 
 
       if (!updatedCart) {
+
         return;
+
       }
 
 
@@ -437,7 +464,9 @@ export class CartStateService {
 
 
       this.updateCart(
-        [...updatedCart]
+        [
+          ...updatedCart
+        ]
       );
 
     };
@@ -451,9 +480,12 @@ export class CartStateService {
     cart: CartItem[]
   ): void {
 
-    // Update BehaviorSubject
+    // Update Angular state
+
     this.cartSubject.next(
-      [...cart]
+      [
+        ...cart
+      ]
     );
 
 
@@ -463,13 +495,15 @@ export class CartStateService {
     );
 
 
-    // Save cart for current user
+    // Save for current user
+
     this.saveCart(
       this.cartSubject.value
     );
 
 
     // Notify Cart Remote
+
     this.sendCartUpdate();
 
   };
@@ -482,7 +516,9 @@ export class CartStateService {
   private sendCartUpdate(): void {
 
     const cart =
-      [...this.cartSubject.value];
+      [
+        ...this.cartSubject.value
+      ];
 
 
     window.dispatchEvent(
@@ -511,7 +547,7 @@ export class CartStateService {
 
 
   // ==========================================
-  // GET CART COUNT
+  // CART COUNT
   // ==========================================
 
   getCartCount(): number {
@@ -529,7 +565,7 @@ export class CartStateService {
 
 
   // ==========================================
-  // GET CART TOTAL
+  // CART TOTAL
   // ==========================================
 
   getCartTotal(): number {
@@ -556,13 +592,10 @@ export class CartStateService {
 
   clearCart(): void {
 
-    // Clear BehaviorSubject
-    this.cartSubject.next([]);
+    this.cartSubject.next(
+      []
+    );
 
-
-    // ==========================================
-    // CLEAR CURRENT USER CART ONLY
-    // ==========================================
 
     const storageKey =
       this.getStorageKey();
@@ -577,7 +610,6 @@ export class CartStateService {
     }
 
 
-    // Notify Cart Remote
     this.sendCartUpdate();
 
 
