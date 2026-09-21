@@ -1,0 +1,147 @@
+export const HOME_FALLBACK = {
+  hero: {
+    badge: '✨ Welcome to MiniShop',
+
+    title: 'Shop Smart.',
+
+    highlightTitle: 'Live Better.',
+
+    description:
+      'Discover amazing products, great prices, and a seamless shopping experience all in one place.',
+
+    primaryButton: {
+      title: 'Shop Now →',
+    },
+
+    secondaryButton: {
+      title: 'Explore Products',
+    },
+
+    statistics: {
+      products: {
+        value: '10K+',
+        label: 'Products',
+      },
+
+      customers: {
+        value: '5K+',
+        label: 'Happy Customers',
+      },
+
+      rating: {
+        value: '4.8 ⭐',
+        label: 'Customer Rating',
+      },
+    },
+
+    visual: {
+      icon: '🛍️',
+
+      title: 'Everything You Need',
+
+      description: 'Simple. Fast. Convenient.',
+
+      ratingCard: {
+        icon: '⭐',
+        value: '4.8',
+        label: 'Customer Rating',
+      },
+
+      deliveryCard: {
+        icon: '🚚',
+        title: 'Fast Delivery',
+        label: 'At your doorstep',
+      },
+    },
+  },
+
+  // ==========================================
+  // CATEGORIES
+  // ==========================================
+
+  categories: {
+    eyebrow: 'EXPLORE OUR STORE',
+
+    title: 'Shop by Category',
+
+    description: 'Find products that match your needs.',
+
+    exploreButton: 'Explore →',
+
+    items: [
+      {
+        name: 'Electronics',
+        icon: '💻',
+        description: 'Latest gadgets and electronics.',
+      },
+
+      {
+        name: 'Fashion',
+        icon: '👕',
+        description: 'Trendy fashion for everyone.',
+      },
+
+      {
+        name: 'Home',
+        icon: '🏠',
+        description: 'Everything you need for your home.',
+      },
+
+      {
+        name: 'Sports',
+        icon: '⚽',
+        description: 'Gear up for your active lifestyle.',
+      },
+    ],
+  },
+
+  // ==========================================
+  // WHY CHOOSE US
+  // ==========================================
+
+  whyChooseUs: {
+    eyebrow: 'WHY CHOOSE MINISHOP',
+
+    title: 'Shopping Made Simple',
+
+    description: 'Everything you need for a better shopping experience.',
+
+    items: [
+      {
+        icon: '🚚',
+        title: 'Fast Delivery',
+        description: 'Quick and reliable delivery right to your doorstep.',
+      },
+
+      {
+        icon: '🔒',
+        title: 'Secure Payment',
+        description: 'Safe and secure payment experience for every order.',
+      },
+
+      {
+        icon: '⭐',
+        title: 'Quality Products',
+        description: 'Carefully selected products for our customers.',
+      },
+
+      {
+        icon: '💬',
+        title: 'Customer Support',
+        description: "We're always here whenever you need help.",
+      },
+    ],
+  },
+
+  // ==========================================
+  // CTA
+  // ==========================================
+
+  cta: {
+    title: 'Ready to Start Shopping?',
+
+    description: "Explore our collection and find something you'll love.",
+
+    button: 'Explore Products →',
+  },
+};

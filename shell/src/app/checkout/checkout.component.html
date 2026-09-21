@@ -1,0 +1,1187 @@
+<!-- ===================================================== -->
+<!-- ORDER SUCCESS -->
+<!-- ===================================================== -->
+
+<div
+  *ngIf="orderPlaced"
+  class="order-success text-center py-5">
+
+  <div class="success-icon">
+    {{ finalContent?.['success']?.['icon'] }}
+  </div>
+
+  <h1 class="fw-bold text-success">
+    {{ finalContent?.['success']?.['title'] }}
+  </h1>
+
+  <p class="text-secondary fs-5">
+    {{ finalContent?.['success']?.['description'] }}
+  </p>
+
+  <div
+    class="card border-0 shadow-sm mx-auto mt-4"
+    style="max-width: 450px;">
+
+    <div class="card-body p-4">
+
+      <p class="text-secondary mb-1">
+        {{ finalContent?.['success']?.['orderIdLabel'] }}
+      </p>
+
+      <h4 class="fw-bold">
+        {{ orderId }}
+      </h4>
+
+      <hr>
+
+      <p class="text-secondary mb-1">
+        {{ finalContent?.['success']?.['orderTotalLabel'] }}
+      </p>
+
+      <h3 class="fw-bold">
+
+        {{ finalContent?.['summary']?.['currency'] }}
+        {{ getTotal() }}
+
+      </h3>
+
+      <p class="text-success fw-semibold mt-3">
+
+        {{ finalContent?.['success']?.['confirmationMessage'] }}
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="mt-4">
+
+    <button
+      class="btn btn-outline-dark px-4"
+      routerLink="/productsNew">
+
+      {{ finalContent?.['success']?.['continueShoppingButton'] }}
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- CHECKOUT PAGE -->
+<!-- ===================================================== -->
+
+<div
+  class="container py-5"
+  *ngIf="!orderPlaced">
+
+  <!-- PAGE HEADER -->
+
+  <div class="mb-4">
+
+    <h1 class="fw-bold">
+      {{ finalContent?.['header']?.['title'] }}
+    </h1>
+
+    <p class="text-secondary">
+      {{ finalContent?.['header']?.['description'] }}
+    </p>
+
+  </div>
+
+
+  <!-- ================================================= -->
+  <!-- EMPTY CART -->
+  <!-- ================================================= -->
+
+  <div
+    *ngIf="cartItems.length === 0"
+    class="text-center py-5">
+
+    <div class="display-1 mb-3">
+
+      {{ finalContent?.['emptyCart']?.['icon'] }}
+
+    </div>
+
+    <h3 class="fw-bold">
+
+      {{ finalContent?.['emptyCart']?.['title'] }}
+
+    </h3>
+
+    <p class="text-secondary">
+
+      {{ finalContent?.['emptyCart']?.['description'] }}
+
+    </p>
+
+    <button
+      class="btn btn-dark px-4"
+      routerLink="/productsNew">
+
+      {{ finalContent?.['emptyCart']?.['continueShoppingButton'] }}
+
+    </button>
+
+  </div>
+
+
+  <!-- ================================================= -->
+  <!-- CHECKOUT -->
+  <!-- ================================================= -->
+
+  <form
+    *ngIf="cartItems.length > 0"
+    [formGroup]="checkoutForm"
+    novalidate>
+
+    <div class="row g-4">
+
+
+      <!-- ============================================= -->
+      <!-- LEFT SIDE -->
+      <!-- ============================================= -->
+
+      <div class="col-lg-7">
+
+
+        <!-- =========================================== -->
+        <!-- DELIVERY ADDRESS -->
+        <!-- =========================================== -->
+
+        <div class="card border-0 shadow-sm mb-4">
+
+          <div class="card-body p-4">
+
+            <h4 class="fw-bold mb-4">
+
+              {{ finalContent?.['delivery']?.['sectionTitle'] }}
+
+            </h4>
+
+
+            <!-- FULL NAME -->
+
+            <div class="mb-3">
+
+              <label
+                for="fullName"
+                class="form-label">
+
+                {{ finalContent?.['delivery']?.['fullNameLabel'] }}
+
+                <span class="text-danger">
+                  {{ finalContent?.['common']?.['requiredIcon'] }}
+                </span>
+
+              </label>
+
+              <input
+                id="fullName"
+                type="text"
+                class="form-control"
+                formControlName="fullName"
+                [placeholder]="
+                  finalContent?.['delivery']?.['fullNamePlaceholder']
+                "
+                [class.is-invalid]="
+                  submitted &&
+                  fullName?.invalid
+                ">
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  submitted &&
+                  fullName?.errors
+                ">
+
+                <span
+                  *ngIf="
+                    fullName?.errors?.['required']
+                  ">
+
+                  {{ finalContent?.['validation']?.['fullNameRequired'] }}
+
+                </span>
+
+                <span
+                  *ngIf="
+                    fullName?.errors?.['minlength']
+                  ">
+
+                  {{ finalContent?.['validation']?.['fullNameMinLength'] }}
+
+                </span>
+
+                <span
+                  *ngIf="
+                    fullName?.errors?.['pattern']
+                  ">
+
+                  {{ finalContent?.['validation']?.['fullNamePattern'] }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- MOBILE -->
+
+            <div class="mb-3">
+
+              <label
+                for="mobile"
+                class="form-label">
+
+                {{ finalContent?.['delivery']?.['mobileLabel'] }}
+
+                <span class="text-danger">
+                  {{ finalContent?.['common']?.['requiredIcon'] }}
+                </span>
+
+              </label>
+
+              <input
+                id="mobile"
+                type="tel"
+                class="form-control"
+                formControlName="mobile"
+                [placeholder]="
+                  finalContent?.['delivery']?.['mobilePlaceholder']
+                "
+                maxlength="10"
+                [class.is-invalid]="
+                  submitted &&
+                  mobile?.invalid
+                ">
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  submitted &&
+                  mobile?.errors
+                ">
+
+                <span
+                  *ngIf="
+                    mobile?.errors?.['required']
+                  ">
+
+                  {{ finalContent?.['validation']?.['mobileRequired'] }}
+
+                </span>
+
+                <span
+                  *ngIf="
+                    mobile?.errors?.['pattern']
+                  ">
+
+                  {{ finalContent?.['validation']?.['mobilePattern'] }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- ADDRESS -->
+
+            <div class="mb-3">
+
+              <label
+                for="address"
+                class="form-label">
+
+                {{ finalContent?.['delivery']?.['addressLabel'] }}
+
+                <span class="text-danger">
+                  {{ finalContent?.['common']?.['requiredIcon'] }}
+                </span>
+
+              </label>
+
+              <textarea
+                id="address"
+                class="form-control"
+                rows="3"
+                formControlName="address"
+                [placeholder]="
+                  finalContent?.['delivery']?.['addressPlaceholder']
+                "
+                [class.is-invalid]="
+                  submitted &&
+                  address?.invalid
+                "></textarea>
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  submitted &&
+                  address?.errors
+                ">
+
+                <span
+                  *ngIf="
+                    address?.errors?.['required']
+                  ">
+
+                  {{ finalContent?.['validation']?.['addressRequired'] }}
+
+                </span>
+
+                <span
+                  *ngIf="
+                    address?.errors?.['minlength']
+                  ">
+
+                  {{ finalContent?.['validation']?.['addressMinLength'] }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- CITY / STATE / PINCODE -->
+
+            <div class="row g-3">
+
+
+              <!-- CITY -->
+
+              <div class="col-md-4">
+
+                <label
+                  for="city"
+                  class="form-label">
+
+                  {{ finalContent?.['delivery']?.['cityLabel'] }}
+
+                  <span class="text-danger">
+                    {{ finalContent?.['common']?.['requiredIcon'] }}
+                  </span>
+
+                </label>
+
+                <input
+                  id="city"
+                  type="text"
+                  class="form-control"
+                  formControlName="city"
+                  [placeholder]="
+                    finalContent?.['delivery']?.['cityPlaceholder']
+                  "
+                  [class.is-invalid]="
+                    submitted &&
+                    city?.invalid
+                  ">
+
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    submitted &&
+                    city?.errors
+                  ">
+
+                  <span
+                    *ngIf="
+                      city?.errors?.['required']
+                    ">
+
+                    {{ finalContent?.['validation']?.['cityRequired'] }}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- STATE -->
+
+              <div class="col-md-4">
+
+                <label
+                  for="state"
+                  class="form-label">
+
+                  {{ finalContent?.['delivery']?.['stateLabel'] }}
+
+                  <span class="text-danger">
+                    {{ finalContent?.['common']?.['requiredIcon'] }}
+                  </span>
+
+                </label>
+
+                <input
+                  id="state"
+                  type="text"
+                  class="form-control"
+                  formControlName="state"
+                  [placeholder]="
+                    finalContent?.['delivery']?.['statePlaceholder']
+                  "
+                  [class.is-invalid]="
+                    submitted &&
+                    state?.invalid
+                  ">
+
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    submitted &&
+                    state?.errors
+                  ">
+
+                  <span
+                    *ngIf="
+                      state?.errors?.['required']
+                    ">
+
+                    {{ finalContent?.['validation']?.['stateRequired'] }}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- PINCODE -->
+
+              <div class="col-md-4">
+
+                <label
+                  for="pincode"
+                  class="form-label">
+
+                  {{ finalContent?.['delivery']?.['pincodeLabel'] }}
+
+                  <span class="text-danger">
+                    {{ finalContent?.['common']?.['requiredIcon'] }}
+                  </span>
+
+                </label>
+
+                <input
+                  id="pincode"
+                  type="text"
+                  class="form-control"
+                  formControlName="pincode"
+                  [placeholder]="
+                    finalContent?.['delivery']?.['pincodePlaceholder']
+                  "
+                  maxlength="6"
+                  [class.is-invalid]="
+                    submitted &&
+                    pincode?.invalid
+                  ">
+
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    submitted &&
+                    pincode?.errors
+                  ">
+
+                  <span
+                    *ngIf="
+                      pincode?.errors?.['required']
+                    ">
+
+                    {{ finalContent?.['validation']?.['pincodeRequired'] }}
+
+                  </span>
+
+                  <span
+                    *ngIf="
+                      pincode?.errors?.['pattern']
+                    ">
+
+                    {{ finalContent?.['validation']?.['pincodePattern'] }}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =========================================== -->
+        <!-- PAYMENT METHOD -->
+        <!-- =========================================== -->
+
+        <div class="card border-0 shadow-sm">
+
+          <div class="card-body p-4">
+
+            <h4 class="fw-bold mb-4">
+
+              {{ finalContent?.['payment']?.['sectionTitle'] }}
+
+            </h4>
+
+
+            <!-- COD -->
+
+            <div
+              class="form-check border rounded p-3 mb-2"
+              [class.border-danger]="
+                submitted &&
+                paymentMethod?.invalid
+              ">
+
+              <input
+                class="form-check-input"
+                type="radio"
+                id="cod"
+                value="cod"
+                formControlName="paymentMethod"
+                (change)="onPaymentMethodChange()">
+
+              <label
+                class="form-check-label"
+                for="cod">
+
+                <strong>
+
+                  {{ finalContent?.['payment']?.['cod']?.['title'] }}
+
+                </strong>
+
+                <div class="text-secondary small">
+
+                  {{ finalContent?.['payment']?.['cod']?.['description'] }}
+
+                </div>
+
+              </label>
+
+            </div>
+
+
+            <!-- UPI -->
+
+            <div
+              class="form-check border rounded p-3 mb-2"
+              [class.border-danger]="
+                submitted &&
+                paymentMethod?.invalid
+              ">
+
+              <input
+                class="form-check-input"
+                type="radio"
+                id="upi"
+                value="upi"
+                formControlName="paymentMethod"
+                (change)="onPaymentMethodChange()">
+
+              <label
+                class="form-check-label"
+                for="upi">
+
+                <strong>
+
+                  {{ finalContent?.['payment']?.['upi']?.['title'] }}
+
+                </strong>
+
+                <div class="text-secondary small">
+
+                  {{ finalContent?.['payment']?.['upi']?.['description'] }}
+
+                </div>
+
+              </label>
+
+            </div>
+
+
+            <!-- UPI DETAILS -->
+
+            <div
+              *ngIf="
+                paymentMethod?.value === 'upi'
+              "
+              class="payment-details mt-3 mb-3">
+
+              <label
+                for="upiId"
+                class="form-label">
+
+                {{ finalContent?.['payment']?.['upi']?.['upiIdLabel'] }}
+
+                <span class="text-danger">
+                  {{ finalContent?.['common']?.['requiredIcon'] }}
+                </span>
+
+              </label>
+
+              <input
+                id="upiId"
+                type="text"
+                class="form-control"
+                formControlName="upiId"
+                [placeholder]="
+                  finalContent?.['payment']?.['upi']?.['upiIdPlaceholder']
+                "
+                [class.is-invalid]="
+                  submitted &&
+                  upiId?.invalid
+                ">
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  submitted &&
+                  upiId?.errors
+                ">
+
+                <span
+                  *ngIf="
+                    upiId?.errors?.['required']
+                  ">
+
+                  {{ finalContent?.['validation']?.['upiRequired'] }}
+
+                </span>
+
+                <span
+                  *ngIf="
+                    upiId?.errors?.['pattern']
+                  ">
+
+                  {{ finalContent?.['validation']?.['upiPattern'] }}
+
+                </span>
+
+              </div>
+
+              <small class="text-secondary">
+
+                {{ finalContent?.['payment']?.['upi']?.['example'] }}
+
+              </small>
+
+            </div>
+
+
+            <!-- CARD -->
+
+            <div
+              class="form-check border rounded p-3"
+              [class.border-danger]="
+                submitted &&
+                paymentMethod?.invalid
+              ">
+
+              <input
+                class="form-check-input"
+                type="radio"
+                id="card"
+                value="card"
+                formControlName="paymentMethod"
+                (change)="onPaymentMethodChange()">
+
+              <label
+                class="form-check-label"
+                for="card">
+
+                <strong>
+
+                  {{ finalContent?.['payment']?.['card']?.['title'] }}
+
+                </strong>
+
+                <div class="text-secondary small">
+
+                  {{ finalContent?.['payment']?.['card']?.['description'] }}
+
+                </div>
+
+              </label>
+
+            </div>
+
+
+            <!-- CARD DETAILS -->
+
+            <div
+              *ngIf="
+                paymentMethod?.value === 'card'
+              "
+              class="payment-details mt-3">
+
+
+              <!-- CARD HOLDER NAME -->
+
+              <div class="mb-3">
+
+                <label
+                  for="cardHolderName"
+                  class="form-label">
+
+                  {{ finalContent?.['payment']?.['card']?.['cardHolderNameLabel'] }}
+
+                  <span class="text-danger">
+                    {{ finalContent?.['common']?.['requiredIcon'] }}
+                  </span>
+
+                </label>
+
+                <input
+                  id="cardHolderName"
+                  type="text"
+                  class="form-control"
+                  formControlName="cardHolderName"
+                  [placeholder]="
+                    finalContent?.['payment']?.['card']?.['cardHolderNamePlaceholder']
+                  "
+                  [class.is-invalid]="
+                    submitted &&
+                    cardHolderName?.invalid
+                  ">
+
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    submitted &&
+                    cardHolderName?.errors
+                  ">
+
+                  <span
+                    *ngIf="
+                      cardHolderName?.errors?.['required']
+                    ">
+
+                    {{ finalContent?.['validation']?.['cardHolderRequired'] }}
+
+                  </span>
+
+                  <span
+                    *ngIf="
+                      cardHolderName?.errors?.['minlength']
+                    ">
+
+                    {{ finalContent?.['validation']?.['cardHolderMinLength'] }}
+
+                  </span>
+
+                  <span
+                    *ngIf="
+                      cardHolderName?.errors?.['pattern']
+                    ">
+
+                    {{ finalContent?.['validation']?.['cardHolderPattern'] }}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- CARD NUMBER -->
+
+              <div class="mb-3">
+
+                <label
+                  for="cardNumber"
+                  class="form-label">
+
+                  {{ finalContent?.['payment']?.['card']?.['cardNumberLabel'] }}
+
+                  <span class="text-danger">
+                    {{ finalContent?.['common']?.['requiredIcon'] }}
+                  </span>
+
+                </label>
+
+                <input
+                  id="cardNumber"
+                  type="text"
+                  class="form-control"
+                  formControlName="cardNumber"
+                  [placeholder]="
+                    finalContent?.['payment']?.['card']?.['cardNumberPlaceholder']
+                  "
+                  maxlength="16"
+                  inputmode="numeric"
+                  [class.is-invalid]="
+                    submitted &&
+                    cardNumber?.invalid
+                  ">
+
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    submitted &&
+                    cardNumber?.errors
+                  ">
+
+                  <span
+                    *ngIf="
+                      cardNumber?.errors?.['required']
+                    ">
+
+                    {{ finalContent?.['validation']?.['cardNumberRequired'] }}
+
+                  </span>
+
+                  <span
+                    *ngIf="
+                      cardNumber?.errors?.['pattern']
+                    ">
+
+                    {{ finalContent?.['validation']?.['cardNumberPattern'] }}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- EXPIRY + CVV -->
+
+              <div class="row g-3">
+
+
+                <!-- EXPIRY -->
+
+                <div class="col-md-6">
+
+                  <label
+                    for="expiryDate"
+                    class="form-label">
+
+                    {{ finalContent?.['payment']?.['card']?.['expiryDateLabel'] }}
+
+                    <span class="text-danger">
+                      {{ finalContent?.['common']?.['requiredIcon'] }}
+                    </span>
+
+                  </label>
+
+                  <input
+                    id="expiryDate"
+                    type="text"
+                    class="form-control"
+                    formControlName="expiryDate"
+                    [placeholder]="
+                      finalContent?.['payment']?.['card']?.['expiryDatePlaceholder']
+                    "
+                    maxlength="5"
+                    [class.is-invalid]="
+                      submitted &&
+                      expiryDate?.invalid
+                    ">
+
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="
+                      submitted &&
+                      expiryDate?.errors
+                    ">
+
+                    <span
+                      *ngIf="
+                        expiryDate?.errors?.['required']
+                      ">
+
+                      {{ finalContent?.['validation']?.['expiryRequired'] }}
+
+                    </span>
+
+                    <span
+                      *ngIf="
+                        expiryDate?.errors?.['pattern']
+                      ">
+
+                      {{ finalContent?.['validation']?.['expiryPattern'] }}
+
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <!-- CVV -->
+
+                <div class="col-md-6">
+
+                  <label
+                    for="cvv"
+                    class="form-label">
+
+                    {{ finalContent?.['payment']?.['card']?.['cvvLabel'] }}
+
+                    <span class="text-danger">
+                      {{ finalContent?.['common']?.['requiredIcon'] }}
+                    </span>
+
+                  </label>
+
+                  <input
+                    id="cvv"
+                    type="password"
+                    class="form-control"
+                    formControlName="cvv"
+                    [placeholder]="
+                      finalContent?.['payment']?.['card']?.['cvvPlaceholder']
+                    "
+                    maxlength="3"
+                    inputmode="numeric"
+                    [class.is-invalid]="
+                      submitted &&
+                      cvv?.invalid
+                    ">
+
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="
+                      submitted &&
+                      cvv?.errors
+                    ">
+
+                    <span
+                      *ngIf="
+                        cvv?.errors?.['required']
+                      ">
+
+                      {{ finalContent?.['validation']?.['cvvRequired'] }}
+
+                    </span>
+
+                    <span
+                      *ngIf="
+                        cvv?.errors?.['pattern']
+                      ">
+
+                      {{ finalContent?.['validation']?.['cvvPattern'] }}
+
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- PAYMENT METHOD ERROR -->
+
+            <div
+              class="text-danger small mt-2"
+              *ngIf="
+                submitted &&
+                paymentMethod?.invalid
+              ">
+
+              {{ finalContent?.['payment']?.['requiredMessage'] }}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ============================================= -->
+      <!-- RIGHT SIDE : ORDER SUMMARY -->
+      <!-- ============================================= -->
+
+      <div class="col-lg-5">
+
+        <div class="card border-0 shadow-sm">
+
+          <div class="card-body p-4">
+
+            <h4 class="fw-bold mb-4">
+
+              {{ finalContent?.['summary']?.['sectionTitle'] }}
+
+            </h4>
+
+
+            <!-- PRODUCTS -->
+
+            <div
+              *ngFor="let item of cartItems"
+              class="d-flex align-items-center mb-3">
+
+              <img
+                [src]="item.product.image"
+                [alt]="item.product.title"
+                class="rounded"
+                width="60"
+                height="60"
+                style="object-fit: cover;">
+
+              <div class="ms-3 flex-grow-1">
+
+                <div class="fw-semibold">
+                  {{ item.product.title }}
+                </div>
+
+                <small class="text-secondary">
+
+                  {{ finalContent?.['summary']?.['currency'] }}
+                  {{ item.product.price }}
+
+                  {{ finalContent?.['common']?.['multiplyIcon'] }}
+
+                  {{ item.quantity }}
+
+                </small>
+
+              </div>
+
+              <strong>
+
+                {{ finalContent?.['summary']?.['currency'] }}
+                {{ getItemTotal(item) }}
+
+              </strong>
+
+            </div>
+
+
+            <hr>
+
+
+            <!-- ITEMS -->
+
+            <div class="d-flex justify-content-between mb-3">
+
+              <span class="text-secondary">
+
+                {{ finalContent?.['summary']?.['itemsLabel'] }}
+
+              </span>
+
+              <span>
+                {{ getCartCount() }}
+              </span>
+
+            </div>
+
+
+            <!-- SUBTOTAL -->
+
+            <div class="d-flex justify-content-between mb-3">
+
+              <span class="text-secondary">
+
+                {{ finalContent?.['summary']?.['subtotalLabel'] }}
+
+              </span>
+
+              <strong>
+
+                {{ finalContent?.['summary']?.['currency'] }}
+                {{ getSubtotal() }}
+
+              </strong>
+
+            </div>
+
+
+            <!-- SHIPPING -->
+
+            <div class="d-flex justify-content-between mb-3">
+
+              <span class="text-secondary">
+
+                {{ finalContent?.['summary']?.['shippingLabel'] }}
+
+              </span>
+
+              <span class="text-success fw-semibold">
+
+                {{ finalContent?.['summary']?.['shippingValue'] }}
+
+              </span>
+
+            </div>
+
+
+            <hr>
+
+
+            <!-- TOTAL -->
+
+            <div
+              class="d-flex justify-content-between align-items-center mb-4">
+
+              <strong class="fs-5">
+
+                {{ finalContent?.['summary']?.['totalLabel'] }}
+
+              </strong>
+
+              <strong class="fs-4">
+
+                {{ finalContent?.['summary']?.['currency'] }}
+                {{ getTotal() }}
+
+              </strong>
+
+            </div>
+
+
+            <!-- PLACE ORDER -->
+
+            <button
+              type="button"
+              class="btn btn-dark w-100 py-2"
+              (click)="placeOrder()">
+
+              {{ finalContent?.['summary']?.['placeOrderButton'] }}
+
+            </button>
+
+
+            <!-- BACK TO CART -->
+
+            <button
+              type="button"
+              class="btn btn-outline-dark w-100 mt-2"
+              routerLink="/cart">
+
+              {{ finalContent?.['summary']?.['backToCartButton'] }}
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </form>
+
+</div>

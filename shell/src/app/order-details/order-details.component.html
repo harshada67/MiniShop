@@ -1,0 +1,466 @@
+<div class="order-details-page">
+
+  <div class="container order-details-container">
+
+    <!-- ================================= -->
+    <!-- HEADER -->
+    <!-- ================================= -->
+
+    <div class="details-header">
+
+      <div>
+
+        <div class="breadcrumb">
+          Home / My Account / Orders / Order Details
+        </div>
+
+        <h1>
+          Order Details
+        </h1>
+
+        <p *ngIf="order">
+          Order {{ order.id }}
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="back-button"
+        (click)="goToOrders()">
+
+        ← Back to Orders
+
+      </button>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- ORDER DETAILS -->
+    <!-- ================================= -->
+
+    <div
+      class="details-content"
+      *ngIf="order">
+
+      <!-- ================================= -->
+      <!-- ORDER SUMMARY HEADER -->
+      <!-- ================================= -->
+
+      <div class="order-summary-card">
+
+        <div>
+
+          <span class="label">
+            ORDER ID
+          </span>
+
+          <h2>
+            {{ order.id }}
+          </h2>
+
+          <p>
+            Placed on
+            {{ order.date | date:'dd MMM yyyy, hh:mm a' }}
+          </p>
+
+        </div>
+
+
+        <div class="status-section">
+
+          <span class="status-badge">
+            ✓ {{ order.status }}
+          </span>
+
+          <small>
+            Order successfully placed
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================= -->
+      <!-- ORDER PROGRESS -->
+      <!-- ================================= -->
+
+      <div class="content-card">
+
+        <div class="card-title">
+          Order Status
+        </div>
+
+        <div class="order-progress">
+
+          <div class="progress-step active">
+
+            <div class="progress-circle">
+              ✓
+            </div>
+
+            <span>
+              Order Placed
+            </span>
+
+          </div>
+
+
+          <div class="progress-line"></div>
+
+
+          <div class="progress-step">
+
+            <div class="progress-circle">
+              2
+            </div>
+
+            <span>
+              Confirmed
+            </span>
+
+          </div>
+
+
+          <div class="progress-line"></div>
+
+
+          <div class="progress-step">
+
+            <div class="progress-circle">
+              3
+            </div>
+
+            <span>
+              Shipped
+            </span>
+
+          </div>
+
+
+          <div class="progress-line"></div>
+
+
+          <div class="progress-step">
+
+            <div class="progress-circle">
+              4
+            </div>
+
+            <span>
+              Delivered
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================= -->
+      <!-- CUSTOMER + PAYMENT -->
+      <!-- ================================= -->
+
+      <div class="two-column-grid">
+
+        <!-- DELIVERY -->
+
+        <div class="content-card">
+
+          <div class="card-title">
+            Delivery Information
+          </div>
+
+          <div class="detail-row">
+
+            <span>
+              Name
+            </span>
+
+            <strong>
+              {{ order.customer.fullName }}
+            </strong>
+
+          </div>
+
+
+          <div class="detail-row">
+
+            <span>
+              Mobile
+            </span>
+
+            <strong>
+              {{ order.customer.mobile }}
+            </strong>
+
+          </div>
+
+
+          <div class="detail-row">
+
+            <span>
+              Address
+            </span>
+
+            <strong>
+              {{ order.customer.address }}
+            </strong>
+
+          </div>
+
+
+          <div class="detail-row">
+
+            <span>
+              City
+            </span>
+
+            <strong>
+              {{ order.customer.city }}
+            </strong>
+
+          </div>
+
+
+          <div class="detail-row">
+
+            <span>
+              State
+            </span>
+
+            <strong>
+              {{ order.customer.state }}
+            </strong>
+
+          </div>
+
+
+          <div class="detail-row">
+
+            <span>
+              Pincode
+            </span>
+
+            <strong>
+              {{ order.customer.pincode }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- PAYMENT -->
+
+        <div class="content-card">
+
+          <div class="card-title">
+            Payment Information
+          </div>
+
+          <div class="payment-method">
+
+            <div class="payment-icon">
+              💳
+            </div>
+
+            <div>
+
+              <span>
+                Payment Method
+              </span>
+
+              <strong>
+                {{ order.paymentMethod }}
+              </strong>
+
+            </div>
+
+          </div>
+
+          <div class="payment-status">
+
+            <span class="payment-check">
+              ✓
+            </span>
+
+            Payment information recorded
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================= -->
+      <!-- ORDER ITEMS -->
+      <!-- ================================= -->
+
+      <div class="content-card">
+
+        <div class="card-title">
+          Ordered Items
+        </div>
+
+
+        <div class="items-list">
+
+          <div
+            class="order-item"
+            *ngFor="let item of order.items">
+
+            <img
+              [src]="item.image"
+              [alt]="item.title">
+
+
+            <div class="item-details">
+
+              <h3>
+                {{ item.title }}
+              </h3>
+
+              <p>
+                Product ID:
+                {{ item.productId }}
+              </p>
+
+            </div>
+
+
+            <div class="item-quantity">
+
+              <span>
+                Quantity
+              </span>
+
+              <strong>
+                {{ item.quantity }}
+              </strong>
+
+            </div>
+
+
+            <div class="item-price">
+
+              <span>
+                Price
+              </span>
+
+              <strong>
+                ₹{{ item.price }}
+              </strong>
+
+            </div>
+
+
+            <div class="item-total">
+
+              <span>
+                Total
+              </span>
+
+              <strong>
+                ₹{{ item.price * item.quantity }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================= -->
+      <!-- PRICE SUMMARY -->
+      <!-- ================================= -->
+
+      <div class="content-card price-card">
+
+        <div class="card-title">
+          Price Summary
+        </div>
+
+
+        <div class="price-row">
+
+          <span>
+            Subtotal
+          </span>
+
+          <strong>
+            ₹{{ order.subtotal }}
+          </strong>
+
+        </div>
+
+
+        <div class="price-row">
+
+          <span>
+            Shipping
+          </span>
+
+          <strong class="free">
+            {{ order.shipping === 0 ? 'FREE' : '₹' + order.shipping }}
+          </strong>
+
+        </div>
+
+
+        <div class="price-divider"></div>
+
+
+        <div class="total-row">
+
+          <span>
+            Total Amount
+          </span>
+
+          <strong>
+            ₹{{ order.total }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================= -->
+      <!-- ACTIONS -->
+      <!-- ================================= -->
+
+      <div class="bottom-actions">
+
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="goToOrders()">
+
+          ← View All Orders
+
+        </button>
+
+        <button
+          type="button"
+          class="primary-button"
+          (click)="continueShopping()">
+
+          Continue Shopping →
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

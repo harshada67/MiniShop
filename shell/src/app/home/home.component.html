@@ -1,0 +1,407 @@
+<!-- ================= HERO SECTION ================= -->
+
+<section class="hero-section">
+
+  <div class="container">
+
+    <div class="row align-items-center py-5">
+
+
+      <!-- ================= LEFT CONTENT ================= -->
+
+      <div class="col-lg-6 py-5">
+
+        <span class="badge bg-dark rounded-pill px-3 py-2 mb-3">
+
+          {{ finalContent?.['hero']?.['badge'] }}
+
+        </span>
+
+
+        <h1 class="display-3 fw-bold mb-4">
+
+          {{ finalContent?.['hero']?.['title'] }}
+
+          <br>
+
+          <span class="text-secondary">
+
+            {{ finalContent?.['hero']?.['highlightTitle'] }}
+
+          </span>
+
+        </h1>
+
+
+        <p class="lead text-secondary mb-4">
+
+          {{ finalContent?.['hero']?.['description'] }}
+
+        </p>
+
+
+        <div class="d-flex gap-3 flex-wrap">
+
+          <button
+            class="btn btn-dark btn-lg px-4"
+            (click)="goToProducts()">
+
+            {{ finalContent?.['hero']?.['primaryButton']?.['title'] }}
+
+          </button>
+
+
+          <button
+            class="btn btn-outline-dark btn-lg px-4"
+            (click)="goToProducts()">
+
+            {{ finalContent?.['hero']?.['secondaryButton']?.['title'] }}
+
+          </button>
+
+        </div>
+
+
+        <!-- ================= STATISTICS ================= -->
+
+        <div class="row mt-5">
+
+          <div class="col-4">
+
+            <h4 class="fw-bold mb-0">
+
+              {{ finalContent?.['hero']?.['statistics']?.['products']?.['value'] }}
+
+            </h4>
+
+            <small class="text-secondary">
+
+              {{ finalContent?.['hero']?.['statistics']?.['products']?.['label'] }}
+
+            </small>
+
+          </div>
+
+
+          <div class="col-4">
+
+            <h4 class="fw-bold mb-0">
+
+              {{ finalContent?.['hero']?.['statistics']?.['customers']?.['value'] }}
+
+            </h4>
+
+            <small class="text-secondary">
+
+              {{ finalContent?.['hero']?.['statistics']?.['customers']?.['label'] }}
+
+            </small>
+
+          </div>
+
+
+          <div class="col-4">
+
+            <h4 class="fw-bold mb-0">
+
+              {{ finalContent?.['hero']?.['statistics']?.['rating']?.['value'] }}
+
+            </h4>
+
+            <small class="text-secondary">
+
+              {{ finalContent?.['hero']?.['statistics']?.['rating']?.['label'] }}
+
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= RIGHT HERO CARD ================= -->
+
+      <div class="col-lg-6 mt-4 mt-lg-0">
+
+        <div class="hero-visual rounded-4 shadow-sm">
+
+          <div class="display-1">
+
+            {{ finalContent?.['hero']?.['visual']?.['icon'] }}
+
+          </div>
+
+
+          <h2 class="fw-bold mt-3">
+
+            {{ finalContent?.['hero']?.['visual']?.['title'] }}
+
+          </h2>
+
+
+          <p class="text-secondary">
+
+            {{ finalContent?.['hero']?.['visual']?.['description'] }}
+
+          </p>
+
+
+          <!-- Rating Floating Card -->
+
+          <div class="floating-card rating-card">
+
+            <span>
+
+              {{ finalContent?.['hero']?.['visual']?.['ratingCard']?.['icon'] }}
+
+            </span>
+
+
+            <strong>
+
+              {{ finalContent?.['hero']?.['visual']?.['ratingCard']?.['value'] }}
+
+            </strong>
+
+
+            <small class="d-block text-secondary">
+
+              {{ finalContent?.['hero']?.['visual']?.['ratingCard']?.['label'] }}
+
+            </small>
+
+          </div>
+
+
+          <!-- Delivery Floating Card -->
+
+          <div class="floating-card delivery-card">
+
+            <span>
+
+              {{ finalContent?.['hero']?.['visual']?.['deliveryCard']?.['icon'] }}
+
+            </span>
+
+
+            <strong>
+
+              {{ finalContent?.['hero']?.['visual']?.['deliveryCard']?.['title'] }}
+
+            </strong>
+
+
+            <small class="d-block text-secondary">
+
+              {{ finalContent?.['hero']?.['visual']?.['deliveryCard']?.['label'] }}
+
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- ================= CATEGORIES ================= -->
+<!-- 
+<section class="py-5 bg-white">
+
+  <div class="container">
+
+    <div class="text-center mb-5">
+
+      <span class="text-secondary small fw-semibold">
+
+        {{ finalContent?.['categories']?.['eyebrow'] }}
+
+      </span>
+
+
+      <h2 class="fw-bold mt-2">
+
+        {{ finalContent?.['categories']?.['title'] }}
+
+      </h2>
+
+
+      <p class="text-secondary">
+
+        {{ finalContent?.['categories']?.['description'] }}
+
+      </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+      <div
+        class="col-12 col-sm-6 col-lg-3"
+        *ngFor="let category of categories">
+
+        <div class="card category-card border-0 shadow-sm h-100">
+
+          <div class="card-body text-center p-4">
+
+            <div class="category-icon">
+
+              {{ category.icon }}
+
+            </div>
+
+
+            <h5 class="fw-bold mt-3">
+
+              {{ category.name }}
+
+            </h5>
+
+
+            <p class="text-secondary small">
+
+              {{ category.description }}
+
+            </p>
+
+
+            <button
+              class="btn btn-outline-dark btn-sm"
+              (click)="goToCategory(category.name)">
+
+              {{ finalContent?.['categories']?.['exploreButton'] }}
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section> -->
+
+
+
+<!-- ================= WHY CHOOSE US ================= -->
+
+<section class="py-5 bg-light">
+
+  <div class="container">
+
+    <div class="text-center mb-5">
+
+      <span class="text-secondary small fw-semibold">
+
+        {{ finalContent?.['whyChooseUs']?.['eyebrow'] }}
+
+      </span>
+
+
+      <h2 class="fw-bold mt-2">
+
+        {{ finalContent?.['whyChooseUs']?.['title'] }}
+
+      </h2>
+
+
+      <p class="text-secondary">
+
+        {{ finalContent?.['whyChooseUs']?.['description'] }}
+
+      </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+      <div
+        class="col-12 col-sm-6 col-lg-3"
+        *ngFor="
+          let item of finalContent?.['whyChooseUs']?.['items']
+        ">
+
+        <div class="text-center p-3">
+
+          <div class="feature-icon">
+
+            {{ item.icon }}
+
+          </div>
+
+
+          <h5 class="fw-bold mt-3">
+
+            {{ item.title }}
+
+          </h5>
+
+
+          <p class="text-secondary small">
+
+            {{ item.description }}
+
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- ================= CTA ================= -->
+
+<section class="py-5">
+
+  <div class="container">
+
+    <div class="cta-section rounded-4 text-center p-5">
+
+      <h2 class="fw-bold">
+
+        {{ finalContent?.['cta']?.['title'] }}
+
+      </h2>
+
+
+      <p class="text-secondary mb-4">
+
+        {{ finalContent?.['cta']?.['description'] }}
+
+      </p>
+
+
+      <button
+        class="btn btn-dark btn-lg px-5"
+        (click)="goToProducts()">
+
+        {{ finalContent?.['cta']?.['button'] }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+</section>

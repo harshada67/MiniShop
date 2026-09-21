@@ -1,0 +1,313 @@
+<!-- ================= NAVBAR ================= -->
+
+<nav
+  class="navbar navbar-expand-lg bg-white border-bottom shadow-sm sticky-top">
+
+  <div class="container">
+
+    <!-- Logo -->
+
+    <a
+      class="navbar-brand fw-bold"
+      routerLink="/">
+
+      {{ finalContent?.['navbar']?.['brand']?.['title'] }}
+
+    </a>
+
+
+    <!-- Mobile menu -->
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#miniShopNavbar">
+
+      <span class="navbar-toggler-icon"></span>
+
+    </button>
+
+
+    <div
+      class="collapse navbar-collapse"
+      id="miniShopNavbar">
+
+
+      <!-- ================= SEARCH ================= -->
+
+      <form
+        class="d-flex mx-lg-4 flex-grow-1 search-container"
+        (ngSubmit)="searchProducts()">
+
+        <input
+          type="search"
+          class="form-control"
+          [placeholder]="
+            finalContent?.['navbar']?.['search']?.['placeholder']
+          "
+          [(ngModel)]="searchText"
+          name="search">
+
+        <button
+          type="submit"
+          class="btn btn-dark ms-2">
+
+          🔍
+
+        </button>
+
+      </form>
+
+
+      <!-- ================= NAVIGATION ================= -->
+
+      <ul
+        class="navbar-nav align-items-lg-center gap-lg-2">
+
+
+        <!-- ================= HOME ================= -->
+
+        <li class="nav-item">
+
+          <a
+            class="nav-link"
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }">
+
+            {{ finalContent?.['navbar']?.['links']?.['home']?.['title'] }}
+
+          </a>
+
+        </li>
+
+
+        <!-- ================= PRODUCTS ================= -->
+
+        <li class="nav-item">
+
+          <a
+            class="nav-link"
+            routerLink="/productsNew"
+            routerLinkActive="active">
+
+            {{ finalContent?.['navbar']?.['links']?.['products']?.['title'] }}
+
+          </a>
+
+        </li>
+
+
+        <!-- ================= CART ================= -->
+
+        <li class="nav-item">
+
+          <a
+            class="nav-link position-relative"
+            routerLink="/cart">
+
+            🛒
+
+            {{ finalContent?.['navbar']?.['links']?.['cart']?.['title'] }}
+
+            <span
+              class="badge bg-dark rounded-pill cart-badge">
+
+              {{ cartCount }}
+
+            </span>
+
+          </a>
+
+        </li>
+
+
+        <!-- ================= ORDERS ================= -->
+
+        <li class="nav-item">
+
+          <a
+            class="nav-link"
+            routerLink="/orders"
+            routerLinkActive="active">
+
+            {{ finalContent?.['navbar']?.['links']?.['orders']?.['title'] }}
+
+          </a>
+
+        </li>
+
+
+        <!-- ================= PROFILE ================= -->
+
+        <li class="nav-item">
+
+          <a
+            class="nav-link"
+            routerLink="/profile">
+
+            👤
+
+            {{ finalContent?.['navbar']?.['links']?.['profile']?.['title'] }}
+
+          </a>
+
+        </li>
+
+      </ul>
+
+    </div>
+
+  </div>
+
+</nav>
+
+
+
+<!-- ================= PAGE CONTENT ================= -->
+
+<main>
+
+  <router-outlet></router-outlet>
+
+</main>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="bg-dark text-white py-5">
+
+  <div class="container">
+
+    <div class="row g-4">
+
+
+      <!-- ================= ABOUT ================= -->
+
+      <div class="col-lg-5">
+
+        <h4 class="fw-bold">
+
+          🛍️
+
+          {{ finalContent?.['footer']?.['brand']?.['title'] }}
+
+        </h4>
+
+        <p class="text-secondary">
+
+          {{ finalContent?.['footer']?.['description']?.['text'] }}
+
+        </p>
+
+      </div>
+
+
+      <!-- ================= SHOP ================= -->
+
+      <div class="col-6 col-lg-2">
+
+        <h6 class="fw-bold">
+
+          {{ finalContent?.['footer']?.['shop']?.['title'] }}
+
+        </h6>
+
+
+        <a
+          routerLink="/productsNew"
+          class="footer-link">
+
+          {{ finalContent?.['footer']?.['shop']?.['products']?.['title'] }}
+
+        </a>
+
+
+        <a
+          routerLink="/cart"
+          class="footer-link">
+
+          {{ finalContent?.['footer']?.['shop']?.['cart']?.['title'] }}
+
+        </a>
+
+      </div>
+
+
+      <!-- ================= ACCOUNT ================= -->
+
+      <div class="col-6 col-lg-2">
+
+        <h6 class="fw-bold">
+
+          {{ finalContent?.['footer']?.['account']?.['title'] }}
+
+        </h6>
+
+
+        <!-- Profile only for now -->
+
+        <a
+          routerLink="/profile"
+          class="footer-link">
+
+          {{ finalContent?.['footer']?.['account']?.['profile']?.['title'] }}
+
+        </a>
+
+      </div>
+
+
+      <!-- ================= CONTACT ================= -->
+
+      <div class="col-lg-3">
+
+        <h6 class="fw-bold">
+
+          {{ finalContent?.['footer']?.['contact']?.['title'] }}
+
+        </h6>
+
+
+        <p class="text-secondary small mb-2">
+
+          📧
+
+          {{ finalContent?.['footer']?.['contact']?.['email'] }}
+
+        </p>
+
+
+        <p class="text-secondary small">
+
+          📞
+
+          {{ finalContent?.['footer']?.['contact']?.['phone'] }}
+
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <hr class="border-secondary my-4">
+
+
+    <!-- ================= COPYRIGHT ================= -->
+
+    <div class="text-center">
+
+      <small class="text-secondary">
+
+        {{ finalContent?.['footer']?.['copyright'] }}
+
+      </small>
+
+    </div>
+
+  </div>
+
+</footer>

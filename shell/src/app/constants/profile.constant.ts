@@ -1,0 +1,118 @@
+export const PROFILE_FALLBACK: Record<string, any> = {
+
+  header: {
+    breadcrumb: 'Home / My Account',
+    title: 'My Account',
+    description: 'Manage your profile, address and account settings.',
+    logoutIcon: '↪',
+    logoutButton: 'Logout'
+  },
+
+  hero: {
+    verifiedIcon: '✓',
+    verifiedText: 'Verified',
+    editIcon: '✎',
+    editProfileButton: 'Edit Profile'
+  },
+
+  editProfile: {
+    title: 'Edit Information',
+    description: 'Update your personal information.',
+    saveButton: 'Save Changes'
+  },
+
+  profileFields: {
+    fullNameLabel: 'Full Name',
+    fullNamePlaceholder: 'Enter your full name',
+    emailLabel: 'Email Address',
+    emailPlaceholder: 'Enter your email',
+    mobileLabel: 'Mobile Number',
+    mobilePlaceholder: 'Enter mobile number',
+    locationLabel: 'Location',
+    locationPlaceholder: 'Enter your location'
+  },
+
+  overview: {
+    title: 'Account Overview',
+    description: 'Your account activity.',
+    ordersIcon: '📦',
+    totalOrdersLabel: 'Total Orders',
+    viewOrdersText: 'View your orders',
+    cartIcon: '🛒',
+    cartItemsLabel: 'Cart Items',
+    viewCartText: 'View your cart'
+  },
+
+  personalInfo: {
+    title: 'Personal Information',
+    description: 'Your current account information.'
+  },
+
+  address: {
+    title: 'Saved Address',
+    description: 'Manage your delivery address.',
+    icon: '📍',
+    defaultLabel: 'DEFAULT',
+    manageButton: 'Manage Address',
+    typeLabel: 'Address Type',
+    selectTypePlaceholder: 'Select address type',
+    homeOption: 'Home',
+    officeOption: 'Office',
+    otherOption: 'Other',
+    detailsLabel: 'Address',
+    detailsPlaceholder: 'Enter your address',
+    saveButton: 'Save Address'
+  },
+
+  security: {
+    title: 'Security',
+    description: 'Manage your account password.',
+    icon: '🔒',
+    passwordTitle: 'Password',
+    passwordDescription: 'Keep your account secure with a strong password.',
+    changeButton: 'Change Password',
+    currentPasswordLabel: 'Current Password',
+    currentPasswordPlaceholder: 'Enter current password',
+    newPasswordLabel: 'New Password',
+    newPasswordPlaceholder: 'Enter new password',
+    passwordHint: 'Minimum 8 characters with uppercase, lowercase, number and special character.',
+    confirmPasswordLabel: 'Confirm Password',
+    confirmPasswordPlaceholder: 'Confirm new password',
+    updateButton: 'Update Password'
+  },
+
+  validation: {
+    fullNameRequired: 'Full name is required.',
+    validName: 'Please enter a valid name.',
+    nameLength: 'Name must be between 2 and 50 characters.',
+    emailRequired: 'Email address is required.',
+    emailInvalid: 'Please enter a valid email address.',
+    mobileRequired: 'Mobile number is required.',
+    mobileInvalid: 'Please enter a valid mobile number.',
+    locationRequired: 'Location is required.',
+    locationInvalid: 'Please enter a valid location.',
+    addressTypeRequired: 'Please select an address type.',
+    addressRequired: 'Address is required.',
+    addressLength: 'Address must be between 5 and 150 characters.',
+    currentPasswordRequired: 'Current password is required.',
+    newPasswordRequired: 'New password is required.',
+    passwordMinLength: 'Password must be at least 8 characters.',
+    passwordPattern: 'Password must contain uppercase, lowercase, number and special character.',
+    confirmPasswordRequired: 'Please confirm your new password.',
+    passwordMismatch: 'Passwords do not match.'
+  },
+
+  common: {
+    cancelButton: 'Cancel'
+  },
+
+  icons: {
+    profile: '👤',
+    overview: '📊'
+  },
+
+  accountNote: {
+    text: '🔒 Your account information is securely stored.'
+  }
+
+};

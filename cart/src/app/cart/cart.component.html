@@ -1,0 +1,458 @@
+<div class="cart-page">
+
+  <div class="container">
+
+    <!-- ==================== PAGE HEADER ==================== -->
+
+    <div class="cart-header">
+
+      <div>
+
+        <span class="cart-eyebrow">
+          {{ finalContent?.['header']?.['eyebrow'] }}
+        </span>
+
+        <h1>
+          {{ finalContent?.['header']?.['title'] }}
+        </h1>
+
+        <p class="cart-count">
+
+          {{ getCartCount() }}
+
+          {{ finalContent?.['header']?.['itemLabel'] }}
+
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================== EMPTY CART ==================== -->
+
+    <div
+      class="empty-cart"
+      *ngIf="cartItems.length === 0"
+    >
+
+      <div class="empty-cart-icon">
+
+        {{ finalContent?.['emptyCart']?.['icon'] }}
+
+      </div>
+
+      <h2>
+
+        {{ finalContent?.['emptyCart']?.['title'] }}
+
+      </h2>
+
+      <p>
+
+        {{ finalContent?.['emptyCart']?.['description'] }}
+
+      </p>
+
+      <button
+        type="button"
+        class="continue-shopping-btn"
+        routerLink="/productsNew"
+      >
+
+        {{ finalContent?.['emptyCart']?.['continueShoppingButton'] }}
+
+      </button>
+
+    </div>
+
+
+    <!-- ==================== CART CONTENT ==================== -->
+
+    <div
+      class="cart-layout"
+      *ngIf="cartItems.length > 0"
+    >
+
+      <!-- ==================== LEFT : CART ITEMS ==================== -->
+
+      <div class="cart-items-section">
+
+        <div class="section-heading">
+
+          <h2>
+            {{ finalContent?.['cart']?.['sectionTitle'] }}
+          </h2>
+
+          <span>
+
+            {{ getCartCount() }}
+
+            {{ finalContent?.['cart']?.['itemLabel'] }}
+
+          </span>
+
+        </div>
+
+
+        <!-- CART ITEM -->
+
+        <div
+          class="cart-item-card"
+          *ngFor="let item of cartItems"
+        >
+
+          <!-- Product Image -->
+
+          <div class="product-image-wrapper">
+
+            <img
+              [src]="item.product.image"
+              [alt]="item.product.title"
+              class="product-image"
+            />
+
+          </div>
+
+
+          <!-- Product Details -->
+
+          <div class="product-details">
+
+            <span class="product-category">
+              {{ item.product.category }}
+            </span>
+
+            <h3 class="product-title">
+              {{ item.product.title }}
+            </h3>
+
+            <div class="product-price">
+
+              <span>
+                {{ finalContent?.['summary']?.['currency'] }}
+              </span>
+
+              {{ item.product.price | number }}
+
+            </div>
+
+            <div class="delivery-info">
+
+              <span class="delivery-icon">
+
+                {{ finalContent?.['cart']?.['deliveryIcon'] }}
+
+              </span>
+
+              {{ finalContent?.['cart']?.['deliveryInfo'] }}
+
+            </div>
+
+          </div>
+
+
+          <!-- Quantity -->
+
+          <div class="quantity-section">
+
+            <span class="quantity-label">
+
+              {{ finalContent?.['cart']?.['quantityLabel'] }}
+
+            </span>
+
+            <div class="quantity-control">
+
+              <button
+                type="button"
+                class="quantity-btn"
+                (click)="decreaseQuantity(item)"
+                [attr.aria-label]="
+                  finalContent?.['cart']?.['decreaseLabel']
+                "
+              >
+
+                {{ finalContent?.['cart']?.['decreaseIcon'] }}
+
+              </button>
+
+              <span class="quantity-value">
+                {{ item.quantity }}
+              </span>
+
+              <button
+                type="button"
+                class="quantity-btn"
+                (click)="increaseQuantity(item)"
+                [attr.aria-label]="
+                  finalContent?.['cart']?.['increaseLabel']
+                "
+              >
+
+                {{ finalContent?.['cart']?.['increaseIcon'] }}
+
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- Item Total -->
+
+          <div class="item-total-section">
+
+            <span class="item-total-label">
+
+              {{ finalContent?.['cart']?.['totalLabel'] }}
+
+            </span>
+
+            <strong class="item-total">
+
+              <span>
+                {{ finalContent?.['summary']?.['currency'] }}
+              </span>
+
+              {{ getItemTotal(item) | number }}
+
+            </strong>
+
+          </div>
+
+
+          <!-- Remove -->
+
+          <button
+            type="button"
+            class="remove-btn"
+            (click)="removeItem(item.product.id)"
+            [attr.aria-label]="
+              finalContent?.['cart']?.['removeButton']
+              + ' '
+              + item.product.title
+            "
+          >
+
+            {{ finalContent?.['cart']?.['removeIcon'] }}
+
+          </button>
+
+        </div>
+
+
+        <!-- Continue Shopping -->
+
+        <div class="continue-shopping">
+
+          <button
+            type="button"
+            class="continue-link"
+            routerLink="/productsNew"
+          >
+
+            {{ finalContent?.['cart']?.['continueShoppingButton'] }}
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==================== RIGHT : ORDER SUMMARY ==================== -->
+
+      <aside class="summary-section">
+
+        <div class="summary-card">
+
+          <h2 class="summary-title">
+
+            {{ finalContent?.['summary']?.['title'] }}
+
+          </h2>
+
+
+          <!-- Items -->
+
+          <div class="summary-row">
+
+            <span>
+
+              {{ finalContent?.['summary']?.['itemsLabel'] }}
+
+              ({{ getCartCount() }})
+
+            </span>
+
+            <span>
+
+              {{ finalContent?.['summary']?.['currency'] }}
+
+              {{ getTotal() | number }}
+
+            </span>
+
+          </div>
+
+
+          <!-- Subtotal -->
+
+          <div class="summary-row">
+
+            <span>
+
+              {{ finalContent?.['summary']?.['subtotalLabel'] }}
+
+            </span>
+
+            <strong>
+
+              {{ finalContent?.['summary']?.['currency'] }}
+
+              {{ getTotal() | number }}
+
+            </strong>
+
+          </div>
+
+
+          <!-- Shipping -->
+
+          <div class="summary-row">
+
+            <span>
+
+              {{ finalContent?.['summary']?.['shippingLabel'] }}
+
+            </span>
+
+            <span class="free-shipping">
+
+              {{ finalContent?.['summary']?.['shippingValue'] }}
+
+            </span>
+
+          </div>
+
+
+          <div class="summary-divider"></div>
+
+
+          <!-- Total -->
+
+          <div class="summary-total">
+
+            <span>
+
+              {{ finalContent?.['summary']?.['totalLabel'] }}
+
+            </span>
+
+            <strong>
+
+              {{ finalContent?.['summary']?.['currency'] }}
+
+              {{ getTotal() | number }}
+
+            </strong>
+
+          </div>
+
+
+          <!-- Checkout -->
+
+          <button
+            type="button"
+            class="checkout-btn"
+            (click)="goToCheckout()"
+          >
+
+            {{ finalContent?.['summary']?.['checkoutButton'] }}
+
+          </button>
+
+
+          <!-- Secure Checkout -->
+
+          <div class="secure-checkout">
+
+            <div class="secure-icon">
+
+              {{ finalContent?.['summary']?.['secureCheckout']?.['icon'] }}
+
+            </div>
+
+            <div>
+
+              <strong>
+
+                {{ finalContent?.['summary']?.['secureCheckout']?.['title'] }}
+
+              </strong>
+
+              <span>
+
+                {{ finalContent?.['summary']?.['secureCheckout']?.['description'] }}
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- Benefits -->
+
+          <div class="checkout-benefits">
+
+            <div class="benefit-item">
+
+              <span>
+
+                {{ finalContent?.['summary']?.['benefits']?.['icon'] }}
+
+              </span>
+
+              {{ finalContent?.['summary']?.['benefits']?.['freeDelivery'] }}
+
+            </div>
+
+
+            <div class="benefit-item">
+
+              <span>
+
+                {{ finalContent?.['summary']?.['benefits']?.['icon'] }}
+
+              </span>
+
+              {{ finalContent?.['summary']?.['benefits']?.['easyReturns'] }}
+
+            </div>
+
+
+            <div class="benefit-item">
+
+              <span>
+
+                {{ finalContent?.['summary']?.['benefits']?.['icon'] }}
+
+              </span>
+
+              {{ finalContent?.['summary']?.['benefits']?.['securePayments'] }}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+
+</div>

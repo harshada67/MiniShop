@@ -1,0 +1,687 @@
+<div class="login-page">
+
+  <div class="login-wrapper">
+
+    <!-- ================================================= -->
+    <!-- LOGO -->
+    <!-- ================================================= -->
+
+    <div class="brand-section">
+
+      <div class="brand-icon">
+        🛍️
+      </div>
+
+      <h1>
+        MiniShop
+      </h1>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- LOGIN / SIGNUP CARD -->
+    <!-- ================================================= -->
+
+    <div class="login-card">
+
+
+      <!-- ================================================= -->
+      <!-- LOGIN MODE -->
+      <!-- ================================================= -->
+
+      <div *ngIf="!isSignupMode">
+
+        <!-- Header -->
+
+        <div class="login-header">
+
+          <h2>
+            {{ loginTitle }}
+          </h2>
+
+          <p>
+            {{ loginMessage }}
+          </p>
+
+        </div>
+
+
+        <!-- LOGIN FORM -->
+
+        <form
+          [formGroup]="loginForm"
+          (ngSubmit)="login()"
+          novalidate>
+
+
+          <!-- ============================================= -->
+          <!-- EMAIL -->
+          <!-- ============================================= -->
+
+          <div class="form-group">
+
+            <label for="email">
+              Email Address
+            </label>
+
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="Enter your email"
+              autocomplete="email"
+              [class.input-error]="
+                email?.invalid &&
+                (email?.touched || submitted)
+              ">
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                email?.invalid &&
+                (email?.touched || submitted)
+              ">
+
+              <span
+                *ngIf="
+                  email?.errors?.['required']
+                ">
+
+                Email is required.
+
+              </span>
+
+              <span
+                *ngIf="
+                  email?.errors?.['email']
+                ">
+
+                Please enter a valid email address.
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- PASSWORD -->
+          <!-- ============================================= -->
+
+          <div class="form-group">
+
+            <label for="password">
+              Password
+            </label>
+
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              [class.input-error]="
+                password?.invalid &&
+                (password?.touched || submitted)
+              ">
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                password?.invalid &&
+                (password?.touched || submitted)
+              ">
+
+              <span
+                *ngIf="
+                  password?.errors?.['required']
+                ">
+
+                Password is required.
+
+              </span>
+
+              <span
+                *ngIf="
+                  password?.errors?.['minlength']
+                ">
+
+                Password must contain at least 6 characters.
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- LOGIN ERROR -->
+          <!-- ============================================= -->
+
+          <div
+            class="login-error"
+            *ngIf="loginError">
+
+            <span class="error-icon">
+              ⚠
+            </span>
+
+            {{ loginError }}
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- LOGIN BUTTON -->
+          <!-- ============================================= -->
+
+          <button
+            type="submit"
+            class="login-button">
+
+            Sign In & Continue
+
+          </button>
+
+        </form>
+
+
+        <!-- ============================================= -->
+        <!-- SIGN UP LINK -->
+        <!-- ============================================= -->
+
+        <div class="signup-section">
+
+          <span class="signup-text">
+            Don't have an account?
+          </span>
+
+          <button
+            type="button"
+            class="signup-link"
+            (click)="showSignup()">
+
+            Create Account
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ================================================= -->
+      <!-- SIGN UP MODE -->
+      <!-- ================================================= -->
+
+      <div *ngIf="isSignupMode">
+
+        <!-- Header -->
+
+        <div class="login-header">
+
+          <h2>
+            Create your account
+          </h2>
+
+          <p>
+            Join MiniShop for a faster and more personalized shopping experience.
+          </p>
+
+        </div>
+
+
+        <!-- SIGNUP FORM -->
+
+        <form
+          [formGroup]="signupForm"
+          (ngSubmit)="signup()"
+          novalidate>
+
+
+          <!-- ============================================= -->
+          <!-- FULL NAME -->
+          <!-- ============================================= -->
+
+          <div class="form-group">
+
+            <label for="signupFullName">
+              Full Name
+            </label>
+
+            <input
+              id="signupFullName"
+              type="text"
+              formControlName="fullName"
+              placeholder="Enter your full name"
+              autocomplete="name"
+              [class.input-error]="
+                fullName?.invalid &&
+                (fullName?.touched || signupSubmitted)
+              ">
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                fullName?.invalid &&
+                (fullName?.touched || signupSubmitted)
+              ">
+
+              <span
+                *ngIf="
+                  fullName?.errors?.['required']
+                ">
+
+                Full name is required.
+
+              </span>
+
+              <span
+                *ngIf="
+                  fullName?.errors?.['minlength']
+                ">
+
+                Full name must contain at least 3 characters.
+
+              </span>
+
+              <span
+                *ngIf="
+                  fullName?.errors?.['maxlength']
+                ">
+
+                Full name cannot exceed 50 characters.
+
+              </span>
+
+              <span
+                *ngIf="
+                  fullName?.errors?.['pattern']
+                ">
+
+                Please enter a valid name.
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- EMAIL -->
+          <!-- ============================================= -->
+
+          <div class="form-group">
+
+            <label for="signupEmail">
+              Email Address
+            </label>
+
+            <input
+              id="signupEmail"
+              type="email"
+              formControlName="email"
+              placeholder="Enter your email"
+              autocomplete="email"
+              [class.input-error]="
+                signupEmail?.invalid &&
+                (signupEmail?.touched || signupSubmitted)
+              ">
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                signupEmail?.invalid &&
+                (signupEmail?.touched || signupSubmitted)
+              ">
+
+              <span
+                *ngIf="
+                  signupEmail?.errors?.['required']
+                ">
+
+                Email is required.
+
+              </span>
+
+              <span
+                *ngIf="
+                  signupEmail?.errors?.['email']
+                ">
+
+                Please enter a valid email address.
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- MOBILE -->
+          <!-- ============================================= -->
+
+          <div class="form-group">
+
+            <label for="signupMobile">
+              Mobile Number
+            </label>
+
+            <input
+              id="signupMobile"
+              type="tel"
+              formControlName="mobile"
+              placeholder="Enter 10 digit mobile number"
+              maxlength="10"
+              inputmode="numeric"
+              autocomplete="tel"
+              [class.input-error]="
+                mobile?.invalid &&
+                (mobile?.touched || signupSubmitted)
+              ">
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                mobile?.invalid &&
+                (mobile?.touched || signupSubmitted)
+              ">
+
+              <span
+                *ngIf="
+                  mobile?.errors?.['required']
+                ">
+
+                Mobile number is required.
+
+              </span>
+
+              <span
+                *ngIf="
+                  mobile?.errors?.['pattern']
+                ">
+
+                Please enter a valid 10 digit mobile number.
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- PASSWORD -->
+          <!-- ============================================= -->
+
+          <div class="form-group">
+
+            <label for="signupPassword">
+              Password
+            </label>
+
+            <input
+              id="signupPassword"
+              type="password"
+              formControlName="password"
+              placeholder="Enter your password"
+              autocomplete="new-password"
+              [class.input-error]="
+                signupPassword?.invalid &&
+                (signupPassword?.touched || signupSubmitted)
+              ">
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                signupPassword?.invalid &&
+                (signupPassword?.touched || signupSubmitted)
+              ">
+
+              <span
+                *ngIf="
+                  signupPassword?.errors?.['required']
+                ">
+
+                Password is required.
+
+              </span>
+
+              <span
+                *ngIf="
+                  signupPassword?.errors?.['minlength']
+                ">
+
+                Password must contain at least 8 characters.
+
+              </span>
+
+              <span
+                *ngIf="
+                  signupPassword?.errors?.['pattern']
+                ">
+
+                Password must contain uppercase, lowercase, number and special character.
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- CONFIRM PASSWORD -->
+          <!-- ============================================= -->
+
+          <div class="form-group">
+
+            <label for="confirmPassword">
+              Confirm Password
+            </label>
+
+            <input
+              id="confirmPassword"
+              type="password"
+              formControlName="confirmPassword"
+              placeholder="Confirm your password"
+              autocomplete="new-password"
+              [class.input-error]="
+                (
+                  confirmPassword?.invalid ||
+                  signupForm.errors?.['passwordMismatch']
+                ) &&
+                (confirmPassword?.touched || signupSubmitted)
+              ">
+
+
+            <div
+              class="error-message"
+              *ngIf="
+                (
+                  confirmPassword?.invalid ||
+                  signupForm.errors?.['passwordMismatch']
+                ) &&
+                (confirmPassword?.touched || signupSubmitted)
+              ">
+
+              <span
+                *ngIf="
+                  confirmPassword?.errors?.['required']
+                ">
+
+                Please confirm your password.
+
+              </span>
+
+              <span
+                *ngIf="
+                  signupForm.errors?.['passwordMismatch'] &&
+                  confirmPassword?.value
+                ">
+
+                Passwords do not match.
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- SIGNUP ERROR -->
+          <!-- ============================================= -->
+
+          <div
+            class="login-error"
+            *ngIf="signupError">
+
+            <span class="error-icon">
+              ⚠
+            </span>
+
+            {{ signupError }}
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- SIGNUP SUCCESS -->
+          <!-- ============================================= -->
+
+          <div
+            class="success-message"
+            *ngIf="signupSuccess">
+
+            ✓ {{ signupSuccess }}
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- CREATE ACCOUNT BUTTON -->
+          <!-- ============================================= -->
+
+          <button
+            type="submit"
+            class="login-button">
+
+            Create Account
+
+          </button>
+
+
+        </form>
+
+
+        <!-- ============================================= -->
+        <!-- BACK TO LOGIN -->
+        <!-- ============================================= -->
+
+        <div class="signup-section">
+
+          <span class="signup-text">
+            Already have an account?
+          </span>
+
+          <button
+            type="button"
+            class="signup-link"
+            (click)="showLogin()">
+
+            Sign In
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ================================================= -->
+      <!-- BENEFITS -->
+      <!-- ================================================= -->
+
+      <div class="login-benefits">
+
+        <div class="benefit-item">
+
+          <span class="benefit-icon">
+            📦
+          </span>
+
+          <span>
+            Track your orders
+          </span>
+
+        </div>
+
+
+        <div class="benefit-item">
+
+          <span class="benefit-icon">
+            🛒
+          </span>
+
+          <span>
+            Faster checkout
+          </span>
+
+        </div>
+
+
+        <div class="benefit-item">
+
+          <span class="benefit-icon">
+            👤
+          </span>
+
+          <span>
+            Manage your account
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- FOOTER -->
+    <!-- ================================================= -->
+
+    <div class="login-footer">
+
+      <span>
+        Secure shopping experience
+      </span>
+
+      <span>
+        •
+      </span>
+
+      <span>
+        © MiniShop
+      </span>
+
+    </div>
+
+  </div>
+
+</div>

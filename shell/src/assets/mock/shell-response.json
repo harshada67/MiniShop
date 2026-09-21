@@ -1,0 +1,74 @@
+{
+  "screenCoverage": "single",
+  "moduleIdentifier": "shell",
+  "lastModified": "2026-09-16T10:00:00",
+  "content": [
+    {
+      "screenIdentifier": "shell-screen",
+      "screenContent": [
+        {
+          "key": "navbar",
+          "brand": {
+            "title": "MiniShop"
+          },
+          "links": {
+            "home": {
+               "title": "Home"
+            },
+            "products": {
+              "title": "Products"
+            },
+            "wishlist": {
+              "title": "Wishlist"
+            },
+            "orders": {
+              "title": "Orders"
+            },
+            "cart": {
+              "title": "Cart"
+            },
+            "profile": {
+              "title": "Profile"
+            }
+          },
+          "search": {
+            "placeholder": "Search products..."
+          }
+        },
+        {
+          "key": "footer",
+          "brand": {
+            "title": "MiniShop"
+          },
+          "description": {
+            "text": "Your simple, smart and seamless online shopping experience."
+          },
+          "shop": {
+            "title": "Shop",
+            "products": {
+              "title": "Products"
+            },
+            "cart": {
+              "title": "Cart"
+            }
+          },
+          "account": {
+            "title": "Account",
+            "orders": {
+              "title": "Orders"
+            },
+            "profile": {
+              "title": "Profile"
+            }
+          },
+          "contact": {
+            "title": "Contact",
+            "email": "support@minishop.com",
+            "phone": "+91 98765 43210"
+          },
+          "copyright": "© 2026 MiniShop. All rights reserved."
+        }
+      ]
+    }
+  ]
+}

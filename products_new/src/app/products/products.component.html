@@ -1,0 +1,194 @@
+<div class="products-page">
+
+  <!-- Cart Success Message -->
+  <div
+    class="cart-message"
+    *ngIf="cartMessage">
+
+    <span class="success-icon">
+      {{ finalContent?.['icons']?.['success'] }}
+    </span>
+
+    <span>
+      {{ cartMessage }}
+    </span>
+
+  </div>
+
+
+  <!-- Page Header -->
+  <section class="products-header">
+
+    <div class="header-content">
+
+      <span class="products-eyebrow">
+        {{ finalContent?.['header']?.['eyebrow'] }}
+      </span>
+
+      <h1>
+        {{ finalContent?.['header']?.['title'] }}
+      </h1>
+
+      <p>
+        {{ finalContent?.['header']?.['description'] }}
+      </p>
+
+    </div>
+
+
+    <!-- Search -->
+    <!--
+    <div class="product-search">
+
+      <span class="search-icon">
+        {{ finalContent?.['icons']?.['search'] }}
+      </span>
+
+      <input
+        type="text"
+        [placeholder]="
+          finalContent?.['header']?.['searchPlaceholder']
+        "
+      />
+
+    </div>
+    -->
+
+  </section>
+
+
+  <!-- Products Meta -->
+  <div class="products-meta">
+
+    <div class="product-count">
+
+      <strong>
+        {{ products.length }}
+      </strong>
+
+      <span>
+        {{ finalContent?.['productsMeta']?.['productLabel'] }}
+      </span>
+
+    </div>
+
+    <span class="collection-text">
+      {{ finalContent?.['productsMeta']?.['collectionText'] }}
+    </span>
+
+  </div>
+
+
+  <!-- No Products Found -->
+  <div
+    class="no-products"
+    *ngIf="
+      searchText &&
+      products.length === 0
+    ">
+
+    <div class="no-products-icon">
+      {{ finalContent?.['icons']?.['search'] }}
+    </div>
+
+    <h2>
+      {{ finalContent?.['noProducts']?.['title'] }}
+    </h2>
+
+    <p>
+      {{ finalContent?.['noProducts']?.['message'] }}
+      "{{ searchText }}".
+    </p>
+
+  </div>
+
+
+  <!-- Product Grid -->
+  <section
+    class="product-grid"
+    *ngIf="products.length > 0">
+
+    <div
+      class="product-card"
+      *ngFor="let product of products">
+
+      <!-- Product Image -->
+      <div class="product-image-wrapper">
+
+        <img
+          [src]="product.image"
+          [alt]="product.title"
+        />
+
+        <span class="category-badge">
+          {{ product.category }}
+        </span>
+
+      </div>
+
+
+      <!-- Product Details -->
+      <div class="product-info">
+
+        <!-- Rating -->
+        <div class="rating">
+
+          <span class="star">
+            {{ finalContent?.['icons']?.['rating'] }}
+          </span>
+
+          <span>
+            {{ product.rating }}
+          </span>
+
+        </div>
+
+
+        <!-- Title -->
+        <h2>
+          {{ product.title }}
+        </h2>
+
+
+        <!-- Description -->
+        <p class="product-description">
+          {{ product.description }}
+        </p>
+
+
+        <!-- Bottom -->
+        <div class="product-bottom">
+
+          <div class="price">
+
+            <span class="currency">
+              {{ finalContent?.['products']?.['currency'] }}
+            </span>
+
+            {{ product.price | number }}
+
+          </div>
+
+
+          <button
+            type="button"
+            class="add-cart-btn"
+            (click)="addToCart(product)">
+
+            <span>
+              {{ finalContent?.['icons']?.['cart'] }}
+            </span>
+
+            {{ finalContent?.['products']?.['addToCart'] }}
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
