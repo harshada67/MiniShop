@@ -25,8 +25,8 @@ export class CartStateService {
   // LOCAL STORAGE
   // ==========================================
 
-  private readonly storageKey =
-    'minishop_cart';
+  private readonly storageKeyPrefix =
+    'minishop_cart_';
 
 
   // ==========================================
@@ -34,32 +34,61 @@ export class CartStateService {
   // ==========================================
 
   private cartSubject =
-    new BehaviorSubject<CartItem[]>(
-      this.loadCart()
-    );
+    new BehaviorSubject<CartItem[]>([]);
 
   cart$ =
     this.cartSubject.asObservable();
 
 
+  // ==========================================
+  // CONSTRUCTOR
+  // ==========================================
+
   constructor() {
 
-    // Products Remote -> Shell
+    // ==========================================
+    // PRODUCTS REMOTE -> CART REMOTE
+    // ==========================================
+
     window.addEventListener(
       'add-to-cart',
       this.handleAddToCart
     );
 
-    // Cart Remote -> Shell
+
+    // ==========================================
+    // SHELL -> CART REMOTE
+    // ==========================================
+
+    window.addEventListener(
+      'cart-updated',
+      this.handleCartUpdated
+    );
+
+
+    // ==========================================
+    // CART REQUEST
+    // ==========================================
+
     window.addEventListener(
       'request-cart',
       this.handleCartRequest
     );
 
+
+    // ==========================================
+    // QUANTITY UPDATE
+    // ==========================================
+
     window.addEventListener(
       'update-cart-quantity',
       this.handleQuantityUpdate
     );
+
+
+    // ==========================================
+    // REMOVE PRODUCT
+    // ==========================================
 
     window.addEventListener(
       'remove-from-cart',
@@ -68,309 +97,416 @@ export class CartStateService {
 
 
     // ==========================================
-    // SEND RESTORED CART
+    // USER LOGIN / LOGOUT
     // ==========================================
 
-    /*
-     * When Shell starts again after browser refresh,
-     * cartSubject is already populated from localStorage.
-     *
-     * Sending the event here allows Cart Remote
-     * to receive the restored cart.
-     */
+    window.addEventListener(
+      'auth-user-changed',
+      this.handleUserChanged
+    );
 
-    this.sendCartUpdate();
+
+    // ==========================================
+    // LOAD CURRENT USER CART
+    // ==========================================
+
+    this.cartSubject.next(
+      this.loadCart()
+    );
 
   }
 
 
   // ==========================================
-  // LOAD CART FROM LOCAL STORAGE
+  // GET CURRENT USER STORAGE KEY
   // ==========================================
 
- private loadCart(): CartItem[] {
-debugger;
-  const savedCart =
-    localStorage.getItem(this.storageKey);
+  private getStorageKey(): string | null {
 
-  console.log(
-    'LOCAL STORAGE CART:',
-    savedCart
-  );
+    const currentUserEmail =
+      localStorage.getItem(
+        'minishop_current_user'
+      );
 
-  if (!savedCart) {
 
-    console.log(
-      'No cart found in localStorage'
+    if (!currentUserEmail) {
+
+      return null;
+
+    }
+
+
+    return (
+      this.storageKeyPrefix +
+      currentUserEmail
+        .trim()
+        .toLowerCase()
     );
-
-    return [];
 
   }
 
-  try {
 
-    const parsedCart =
-      JSON.parse(savedCart);
+  // ==========================================
+  // LOAD CART
+  // ==========================================
 
-    console.log(
-      'PARSED CART:',
-      parsedCart
-    );
+  private loadCart(): CartItem[] {
 
-    if (!Array.isArray(parsedCart)) {
+    const storageKey =
+      this.getStorageKey();
 
-      console.error(
-        'Stored cart is not an array'
+
+    // No logged-in user
+
+    if (!storageKey) {
+
+      console.log(
+        'No logged-in user. Cart Remote is empty.'
       );
 
       return [];
 
     }
 
-    return parsedCart;
 
-  } catch (error) {
+    const savedCart =
+      localStorage.getItem(
+        storageKey
+      );
 
-    console.error(
-      'Cart JSON parse failed:',
-      error
+
+    console.log(
+      'Cart Remote loading:',
+      storageKey,
+      savedCart
     );
 
-    return [];
+
+    if (!savedCart) {
+
+      return [];
+
+    }
+
+
+    try {
+
+      const parsedCart =
+        JSON.parse(savedCart);
+
+
+      if (!Array.isArray(parsedCart)) {
+
+        return [];
+
+      }
+
+
+      return parsedCart;
+
+    } catch (error) {
+
+      console.error(
+        'Cart Remote cart JSON parse failed:',
+        error
+      );
+
+      return [];
+
+    }
 
   }
-}
 
 
   // ==========================================
-  // SAVE CART TO LOCAL STORAGE
+  // SAVE CART
   // ==========================================
 
- private saveCart(
-  cart: CartItem[]
-): void {
+  private saveCart(
+    cart: CartItem[]
+  ): void {
 
-  console.log(
-    'SAVING CART:',
-    cart
-  );
+    const storageKey =
+      this.getStorageKey();
 
-  localStorage.setItem(
-    this.storageKey,
-    JSON.stringify(cart)
-  );
 
-  console.log(
-    'SAVED CART:',
-    localStorage.getItem(
-      this.storageKey
-    )
-  );
-}
+    if (!storageKey) {
+
+      console.warn(
+        'Cart Remote: no logged-in user.'
+      );
+
+      return;
+
+    }
+
+
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify(cart)
+    );
+
+  }
+
+
+  // ==========================================
+  // USER CHANGED
+  // ==========================================
+
+  private handleUserChanged =
+    (): void => {
+
+      console.log(
+        '🔄 Cart Remote: user changed.'
+      );
+
+
+      const userCart =
+        this.loadCart();
+
+
+      this.cartSubject.next(
+        userCart
+      );
+
+    };
+
+
+  // ==========================================
+  // SHELL CART UPDATED
+  // ==========================================
+
+  private handleCartUpdated =
+    (event: Event): void => {
+
+      const customEvent =
+        event as CustomEvent<CartItem[]>;
+
+
+      const cart =
+        customEvent.detail;
+
+
+      if (!cart) {
+
+        return;
+
+      }
+
+
+      console.log(
+        'Cart Remote received cart from Shell:',
+        cart
+      );
+
+
+      this.cartSubject.next(
+        [
+          ...cart
+        ]
+      );
+
+    };
 
 
   // ==========================================
   // ADD TO CART
   // ==========================================
 
-  private handleAddToCart = (
-    event: Event
-  ): void => {
+  private handleAddToCart =
+    (event: Event): void => {
 
-    const customEvent =
-      event as CustomEvent<Product>;
-
-    const product =
-      customEvent.detail;
+      const customEvent =
+        event as CustomEvent<Product>;
 
 
-    if (!product) {
-
-      return;
-
-    }
+      const product =
+        customEvent.detail;
 
 
-    const currentCart =
-      [...this.cartSubject.value];
+      if (!product) {
+
+        return;
+
+      }
 
 
-    const existingItem =
-      currentCart.find(
-        item =>
-          item.product.id ===
-          product.id
-      );
+      const currentCart =
+        [
+          ...this.cartSubject.value
+        ];
 
 
-    if (existingItem) {
-
-      // Same product -> increase quantity
-
-      const updatedCart =
-        currentCart.map(item => {
-
-          if (
+      const existingItem =
+        currentCart.find(
+          item =>
             item.product.id ===
             product.id
-          ) {
+        );
 
-            return {
-              ...item,
-              quantity:
-                item.quantity + 1
-            };
 
+      let updatedCart: CartItem[];
+
+
+      if (existingItem) {
+
+        updatedCart =
+          currentCart.map(item => {
+
+            if (
+              item.product.id ===
+              product.id
+            ) {
+
+              return {
+                ...item,
+                quantity:
+                  item.quantity + 1
+              };
+
+            }
+
+            return item;
+
+          });
+
+      } else {
+
+        updatedCart = [
+          ...currentCart,
+          {
+            product: product,
+            quantity: 1
           }
+        ];
 
-          return item;
-
-        });
-
-
-      this.updateCart(
-        updatedCart
-      );
-
-    } else {
-
-      // New product
-
-      const updatedCart = [
-        ...currentCart,
-        {
-          product: product,
-          quantity: 1
-        }
-      ];
+      }
 
 
       this.updateCart(
         updatedCart
       );
 
-    }
-
-  };
+    };
 
 
   // ==========================================
   // CART REQUEST
   // ==========================================
 
-  private handleCartRequest = (): void => {
+  private handleCartRequest =
+    (): void => {
 
-    this.sendCartUpdate();
+      this.cartSubject.next(
+        this.loadCart()
+      );
 
-  };
+    };
 
 
   // ==========================================
   // UPDATE QUANTITY
   // ==========================================
 
-  private handleQuantityUpdate = (
-    event: Event
-  ): void => {
+  private handleQuantityUpdate =
+    (event: Event): void => {
 
-    const customEvent =
-      event as CustomEvent<{
-        productId: number;
-        quantity: number;
-      }>;
-
-
-    const detail =
-      customEvent.detail;
+      const customEvent =
+        event as CustomEvent<{
+          productId: number;
+          quantity: number;
+        }>;
 
 
-    if (!detail) {
-
-      return;
-
-    }
+      const detail =
+        customEvent.detail;
 
 
-    const productId =
-      detail.productId;
+      if (!detail) {
 
-    const quantity =
-      detail.quantity;
+        return;
+
+      }
 
 
-    // If quantity becomes 0,
-    // remove product
+      const productId =
+        detail.productId;
 
-    if (quantity <= 0) {
 
-      this.removeProduct(
-        productId
+      const quantity =
+        detail.quantity;
+
+
+      if (quantity <= 0) {
+
+        this.removeProduct(
+          productId
+        );
+
+        return;
+
+      }
+
+
+      const updatedCart =
+        this.cartSubject.value.map(
+          item => {
+
+            if (
+              item.product.id ===
+              productId
+            ) {
+
+              return {
+                ...item,
+                quantity: quantity
+              };
+
+            }
+
+            return item;
+
+          }
+        );
+
+
+      this.updateCart(
+        updatedCart
       );
 
-      return;
-
-    }
-
-
-    const updatedCart =
-      this.cartSubject.value.map(item => {
-
-        if (
-          item.product.id ===
-          productId
-        ) {
-
-          return {
-            ...item,
-            quantity: quantity
-          };
-
-        }
-
-        return item;
-
-      });
-
-
-    this.updateCart(
-      updatedCart
-    );
-
-  };
+    };
 
 
   // ==========================================
   // REMOVE PRODUCT
   // ==========================================
 
-  private handleRemoveFromCart = (
-    event: Event
-  ): void => {
+  private handleRemoveFromCart =
+    (event: Event): void => {
 
-    const customEvent =
-      event as CustomEvent<number>;
-
-
-    const productId =
-      customEvent.detail;
+      const customEvent =
+        event as CustomEvent<number>;
 
 
-    if (
-      productId === undefined ||
-      productId === null
-    ) {
-
-      return;
-
-    }
+      const productId =
+        customEvent.detail;
 
 
-    this.removeProduct(
-      productId
-    );
+      if (
+        productId === undefined ||
+        productId === null
+      ) {
 
-  };
+        return;
+
+      }
+
+
+      this.removeProduct(
+        productId
+      );
+
+    };
 
 
   private removeProduct(
@@ -400,13 +536,13 @@ debugger;
     cart: CartItem[]
   ): void {
 
-    // 1. Update Angular state
     this.cartSubject.next(
-      cart
+      [
+        ...cart
+      ]
     );
 
 
-    // 2. Persist cart
     this.saveCart(
       cart
     );
@@ -418,24 +554,14 @@ debugger;
     );
 
 
-    // 3. Notify Cart Remote
-    this.sendCartUpdate();
-
-  }
-
-
-  // ==========================================
-  // SEND CART TO CART REMOTE
-  // ==========================================
-
-  private sendCartUpdate(): void {
+    // Notify Shell
 
     window.dispatchEvent(
       new CustomEvent<CartItem[]>(
-        'cart-updated',
+        'cart-local-update',
         {
           detail: [
-            ...this.cartSubject.value
+            ...cart
           ]
         }
       )
@@ -450,7 +576,9 @@ debugger;
 
   getCart(): CartItem[] {
 
-    return this.cartSubject.value;
+    return [
+      ...this.cartSubject.value
+    ];
 
   }
 
@@ -462,7 +590,10 @@ debugger;
   getCartCount(): number {
 
     return this.cartSubject.value.reduce(
-      (total, item) =>
+      (
+        total,
+        item
+      ) =>
         total + item.quantity,
       0
     );
@@ -477,7 +608,10 @@ debugger;
   getCartTotal(): number {
 
     return this.cartSubject.value.reduce(
-      (total, item) =>
+      (
+        total,
+        item
+      ) =>
         total +
         (
           item.product.price *
