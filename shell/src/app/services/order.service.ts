@@ -43,23 +43,34 @@ export class OrderService {
     private authService: AuthService
   ) {
 
-    /*
-     * AuthService is required to identify
-     * the currently logged-in user.
-     *
-     * Therefore orders are loaded here
-     * instead of during field initialization.
-     */
+    console.log(
+      '🔥 OrderService CREATED'
+    );
+
+
+    // ==========================================
+    // LOAD CURRENT USER ORDERS
+    // ==========================================
 
     this.ordersSubject.next(
       this.loadOrders()
+    );
+
+
+    // ==========================================
+    // USER LOGIN / LOGOUT
+    // ==========================================
+
+    window.addEventListener(
+      'auth-user-changed',
+      this.handleUserChanged
     );
 
   }
 
 
   // ==========================================
-  // GET CURRENT USER STORAGE KEY
+  // CURRENT USER STORAGE KEY
   // ==========================================
 
   private getStorageKey(): string | null {
@@ -83,6 +94,35 @@ export class OrderService {
     );
 
   }
+
+
+  // ==========================================
+  // USER CHANGED
+  // ==========================================
+
+  private handleUserChanged =
+    (): void => {
+
+      console.log(
+        '🔄 Current user changed. Reloading orders...'
+      );
+
+
+      const userOrders =
+        this.loadOrders();
+
+
+      this.ordersSubject.next(
+        userOrders
+      );
+
+
+      console.log(
+        '📦 Orders loaded for current user:',
+        userOrders
+      );
+
+    };
 
 
   // ==========================================
@@ -131,10 +171,14 @@ export class OrderService {
     ];
 
 
+    // Update BehaviorSubject
+
     this.ordersSubject.next(
       updatedOrders
     );
 
+
+    // Save for current user
 
     this.saveOrders(
       updatedOrders
@@ -142,7 +186,7 @@ export class OrderService {
 
 
     console.log(
-      'Order added for current user:',
+      '📦 Order added for current user:',
       order
     );
 
@@ -188,10 +232,9 @@ export class OrderService {
       this.getStorageKey();
 
 
-    /*
-     * Never save orders without a
-     * logged-in user.
-     */
+    // ========================================
+    // NO LOGGED-IN USER
+    // ========================================
 
     if (!storageKey) {
 
@@ -211,7 +254,7 @@ export class OrderService {
 
 
     console.log(
-      'Orders saved:',
+      '💾 Orders saved:',
       storageKey,
       orders
     );
@@ -229,10 +272,9 @@ export class OrderService {
       this.getStorageKey();
 
 
-    /*
-     * No logged-in user means there are
-     * no user-specific orders to load.
-     */
+    // ========================================
+    // NO LOGGED-IN USER
+    // ========================================
 
     if (!storageKey) {
 
@@ -252,11 +294,15 @@ export class OrderService {
 
 
     console.log(
-      'LOCAL STORAGE ORDERS:',
+      '📦 LOCAL STORAGE ORDERS:',
       storageKey,
       savedOrders
     );
 
+
+    // ========================================
+    // NO ORDERS
+    // ========================================
 
     if (!savedOrders) {
 
