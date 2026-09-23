@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 
 import {
@@ -17,7 +18,11 @@ import {
 
 import {
   SHELL_FALLBACK
-} from './constants/shell.constant';
+} from './constants/shell_en.constant';
+
+import {
+  SHELL_CONSTANTS_MAP
+} from './constants/shell.constants';
 
 import {
   OrderService
@@ -29,7 +34,7 @@ import {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   searchText = '';
 
@@ -41,6 +46,28 @@ export class AppComponent implements OnInit {
 
   finalContent: any = null;
 
+
+  // ================================
+  // LANGUAGE
+  // ================================
+
+  selectedLanguage = 'en';
+
+  readonly languages = [
+    {
+      code: 'en',
+      label: 'English'
+    },
+    {
+      code: 'hi',
+      label: 'हिंदी'
+    }
+  ];
+
+
+  // ================================
+  // CONSTRUCTOR
+  // ================================
 
   constructor(
     private router: Router,
@@ -94,11 +121,124 @@ export class AppComponent implements OnInit {
   }
 
 
+  // ================================
+  // INIT
+  // ================================
+
   ngOnInit(): void {
+
+    // Get saved language
+    const savedLanguage =
+      localStorage.getItem(
+        'minishop_language'
+      );
+
+    if (
+      savedLanguage === 'en' ||
+      savedLanguage === 'hi'
+    ) {
+
+      this.selectedLanguage =
+        savedLanguage;
+
+    }
+
 
     this.loadCmsContent();
 
+
+    // ================================
+    // LANGUAGE CHANGE LISTENER
+    // ================================
+
+    window.addEventListener(
+      'language-changed',
+      this.handleLanguageChange
+    );
+
   }
+
+
+  // ================================
+  // LANGUAGE CHANGE
+  // ================================
+
+  changeLanguage(
+    language: string
+  ): void {
+
+    if (
+      language !== 'en' &&
+      language !== 'hi'
+    ) {
+
+      return;
+
+    }
+
+
+    this.selectedLanguage =
+      language;
+
+
+    localStorage.setItem(
+      'minishop_language',
+      language
+    );
+
+
+    console.log(
+      'Language changed:',
+      language
+    );
+
+
+    // Reload Shell CMS
+    this.loadCmsContent();
+
+
+    // Notify Home component
+    window.dispatchEvent(
+      new CustomEvent(
+        'language-changed',
+        {
+          detail: language
+        }
+      )
+    );
+
+  }
+
+
+  // ================================
+  // HANDLE LANGUAGE EVENT
+  // ================================
+
+  private handleLanguageChange = (
+    event: Event
+  ): void => {
+
+    const customEvent =
+      event as CustomEvent<string>;
+
+    const language =
+      customEvent.detail;
+
+
+    if (
+      language !== 'en' &&
+      language !== 'hi'
+    ) {
+
+      return;
+
+    }
+
+
+    this.selectedLanguage =
+      language;
+
+  };
 
 
   // ================================
@@ -108,10 +248,13 @@ export class AppComponent implements OnInit {
   private loadCmsContent(): void {
 
     this.cmsContentService
-      .getShellContent()
+      .getShellContent(
+        this.selectedLanguage
+      )
       .subscribe(response => {
 
         this.cmsContent = response;
+
 
         console.log(
           'Shell CMS Response:',
@@ -140,6 +283,17 @@ export class AppComponent implements OnInit {
   revampFallback(): any {
 
     // ==================================
+    // LANGUAGE FALLBACK
+    // ==================================
+
+    const languageFallback =
+      SHELL_CONSTANTS_MAP[
+        this.selectedLanguage
+      ] ||
+      SHELL_CONSTANTS_MAP['en'];
+
+
+    // ==================================
     // CMS RESPONSE NOT AVAILABLE
     // ==================================
 
@@ -149,7 +303,7 @@ export class AppComponent implements OnInit {
     ) {
 
       return this.cloneFallback(
-        SHELL_FALLBACK
+        languageFallback
       );
 
     }
@@ -175,7 +329,7 @@ export class AppComponent implements OnInit {
     ) {
 
       return this.cloneFallback(
-        SHELL_FALLBACK
+        languageFallback
       );
 
     }
@@ -213,12 +367,12 @@ export class AppComponent implements OnInit {
 
 
     // ==================================
-    // MERGE CMS + FALLBACK
+    // MERGE CMS + LANGUAGE FALLBACK
     // ==================================
 
     return this.mergeFallback(
       cmsData,
-      SHELL_FALLBACK
+      languageFallback
     );
 
   }
@@ -432,6 +586,20 @@ export class AppComponent implements OnInit {
           search: search
         }
       }
+    );
+
+  }
+
+
+  // ================================
+  // DESTROY
+  // ================================
+
+  ngOnDestroy(): void {
+
+    window.removeEventListener(
+      'language-changed',
+      this.handleLanguageChange
     );
 
   }

@@ -1,19 +1,20 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
+
+import {
+  Router
+} from '@angular/router';
 
 import {
   CmsContentService
 } from '../services/cms-content/cms-content.service';
 
 import {
-  HOME_FALLBACK
-} from '../constants/home.constant';
-
-import {
-  Router
-} from '@angular/router';
+  HOME_CONSTANTS_MAP
+} from '../constants/home.constants';
 
 
 @Component({
@@ -21,74 +22,126 @@ import {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
-
-  // ==========================================
-  // CMS CONTENT
-  // ==========================================
+export class HomeComponent
+  implements OnInit, OnDestroy {
 
   homeContent: any = null;
 
   finalContent: any = null;
 
-
-  // ==========================================
-  // CATEGORIES
-  // ==========================================
-
   categories: any[] = [];
 
 
-  // ==========================================
+  // ================================
+  // LANGUAGE
+  // ================================
+
+  selectedLanguage = 'en';
+
+
+  // ================================
   // CONSTRUCTOR
-  // ==========================================
+  // ================================
 
   constructor(
-    private router: Router,
+    private cmsContentService: CmsContentService,
 
-    private cmsContentService:
-      CmsContentService
+    private router: Router
   ) {}
 
 
-  // ==========================================
+  // ================================
   // INIT
-  // ==========================================
+  // ================================
 
   ngOnInit(): void {
 
+    // Get saved language
+    const savedLanguage =
+      localStorage.getItem(
+        'minishop_language'
+      );
+
+
+    if (
+      savedLanguage === 'en' ||
+      savedLanguage === 'hi'
+    ) {
+
+      this.selectedLanguage =
+        savedLanguage;
+
+    }
+
+
+    // Load Home CMS
     this.loadHomeContent();
+
+
+    // Listen for language change
+    window.addEventListener(
+      'language-changed',
+      this.handleLanguageChange
+    );
 
   }
 
 
-  // ==========================================
+  // ================================
+  // HANDLE LANGUAGE CHANGE
+  // ================================
+
+  private handleLanguageChange = (
+    event: Event
+  ): void => {
+
+    const customEvent =
+      event as CustomEvent<string>;
+
+    const language =
+      customEvent.detail;
+
+
+    if (
+      language !== 'en' &&
+      language !== 'hi'
+    ) {
+
+      return;
+
+    }
+
+
+    this.selectedLanguage =
+      language;
+
+
+    console.log(
+      'Home language changed:',
+      this.selectedLanguage
+    );
+
+
+    // Reload Home CMS
+    this.loadHomeContent();
+
+  };
+
+
+  // ================================
   // LOAD HOME CONTENT
-  // ==========================================
+  // ================================
 
   private loadHomeContent(): void {
 
     this.cmsContentService
-      .getHomeContent()
+      .getHomeContent(
+        this.selectedLanguage
+      )
       .subscribe(response => {
 
-        // Store raw CMS response
         this.homeContent =
           response;
-
-
-        // Build final CMS + fallback content
-        this.finalContent =
-          this.revampFallback();
-
-
-        // Categories used by *ngFor
-        this.categories =
-          this.finalContent?.[
-            'categories'
-          ]?.[
-            'items'
-          ] || [];
 
 
         console.log(
@@ -97,25 +150,55 @@ export class HomeComponent implements OnInit {
         );
 
 
+        // ==================================
+        // REVAMP + FALLBACK
+        // ==================================
+
+        this.finalContent =
+          this.revampFallback();
+
+
         console.log(
           'Home Final Content:',
           this.finalContent
         );
+
+
+        // ==================================
+        // CATEGORIES
+        // ==================================
+
+        this.categories =
+          this.finalContent
+            ?.categories
+            ?.items ||
+          [];
 
       });
 
   }
 
 
-  // ==========================================
+  // ================================
   // REVAMP FALLBACK
-  // ==========================================
+  // ================================
 
   revampFallback(): any {
 
-    // ========================================
+    // ==================================
+    // LANGUAGE FALLBACK
+    // ==================================
+
+    const languageFallback =
+      HOME_CONSTANTS_MAP[
+        this.selectedLanguage
+      ] ||
+      HOME_CONSTANTS_MAP['en'];
+
+
+    // ==================================
     // CMS RESPONSE NOT AVAILABLE
-    // ========================================
+    // ==================================
 
     if (
       this.homeContent === null ||
@@ -123,15 +206,15 @@ export class HomeComponent implements OnInit {
     ) {
 
       return this.cloneFallback(
-        HOME_FALLBACK
+        languageFallback
       );
 
     }
 
 
-    // ========================================
+    // ==================================
     // EXTRACT SCREEN CONTENT
-    // ========================================
+    // ==================================
 
     const screenContent =
       this.homeContent
@@ -139,9 +222,9 @@ export class HomeComponent implements OnInit {
         ?.screenContent;
 
 
-    // ========================================
+    // ==================================
     // SCREEN CONTENT NOT AVAILABLE
-    // ========================================
+    // ==================================
 
     if (
       !Array.isArray(screenContent) ||
@@ -149,16 +232,16 @@ export class HomeComponent implements OnInit {
     ) {
 
       return this.cloneFallback(
-        HOME_FALLBACK
+        languageFallback
       );
 
     }
 
 
-    // ========================================
+    // ==================================
     // CONVERT KEY-BASED CMS
     // INTO OBJECT
-    // ========================================
+    // ==================================
 
     const cmsData: any = {};
 
@@ -186,30 +269,30 @@ export class HomeComponent implements OnInit {
     );
 
 
-    // ========================================
-    // MERGE CMS + FALLBACK
-    // ========================================
+    // ==================================
+    // MERGE CMS + LANGUAGE FALLBACK
+    // ==================================
 
     return this.mergeFallback(
       cmsData,
-      HOME_FALLBACK
+      languageFallback
     );
 
   }
 
 
-  // ==========================================
+  // ================================
   // RECURSIVE FALLBACK MERGE
-  // ==========================================
+  // ================================
 
   private mergeFallback(
     cmsData: any,
     fallbackData: any
   ): any {
 
-    // ========================================
+    // ==================================
     // CMS COMPLETELY UNAVAILABLE
-    // ========================================
+    // ==================================
 
     if (
       cmsData === null ||
@@ -223,9 +306,9 @@ export class HomeComponent implements OnInit {
     }
 
 
-    // ========================================
+    // ==================================
     // PRIMITIVE VALUE
-    // ========================================
+    // ==================================
 
     if (
       typeof fallbackData !== 'object' ||
@@ -247,13 +330,11 @@ export class HomeComponent implements OnInit {
     }
 
 
-    // ========================================
+    // ==================================
     // ARRAY
-    // ========================================
+    // ==================================
 
-    if (
-      Array.isArray(fallbackData)
-    ) {
+    if (Array.isArray(fallbackData)) {
 
       if (
         !Array.isArray(cmsData) ||
@@ -273,9 +354,9 @@ export class HomeComponent implements OnInit {
     }
 
 
-    // ========================================
+    // ==================================
     // OBJECT
-    // ========================================
+    // ==================================
 
     const result: any = {};
 
@@ -290,9 +371,9 @@ export class HomeComponent implements OnInit {
           fallbackData[key];
 
 
-        // ======================================
+        // ==================================
         // MISSING / NULL / EMPTY CMS VALUE
-        // ======================================
+        // ==================================
 
         if (
           cmsValue === undefined ||
@@ -310,9 +391,9 @@ export class HomeComponent implements OnInit {
         }
 
 
-        // ======================================
+        // ==================================
         // NESTED OBJECT
-        // ======================================
+        // ==================================
 
         if (
           typeof fallbackValue === 'object' &&
@@ -331,9 +412,9 @@ export class HomeComponent implements OnInit {
         }
 
 
-        // ======================================
+        // ==================================
         // CMS VALUE AVAILABLE
-        // ======================================
+        // ==================================
 
         result[key] =
           cmsValue;
@@ -346,9 +427,9 @@ export class HomeComponent implements OnInit {
   }
 
 
-  // ==========================================
+  // ================================
   // CLONE FALLBACK
-  // ==========================================
+  // ================================
 
   private cloneFallback(
     data: any
@@ -380,22 +461,22 @@ export class HomeComponent implements OnInit {
   }
 
 
-  // ==========================================
+  // ================================
   // GO TO PRODUCTS
-  // ==========================================
+  // ================================
 
   goToProducts(): void {
 
-    this.router.navigate([
-      '/productsNew'
-    ]);
+    this.router.navigate(
+      ['/productsNew']
+    );
 
   }
 
 
-  // ==========================================
+  // ================================
   // GO TO CATEGORY
-  // ==========================================
+  // ================================
 
   goToCategory(
     category: string
@@ -408,6 +489,20 @@ export class HomeComponent implements OnInit {
           category: category
         }
       }
+    );
+
+  }
+
+
+  // ================================
+  // DESTROY
+  // ================================
+
+  ngOnDestroy(): void {
+
+    window.removeEventListener(
+      'language-changed',
+      this.handleLanguageChange
     );
 
   }

@@ -195,7 +195,6 @@ export class ProfileComponent implements OnInit {
      ===================================================== */
 
   private createPasswordForm(): void {
-
     this.passwordForm = this.fb.group(
 
       {

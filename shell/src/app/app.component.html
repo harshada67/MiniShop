@@ -155,6 +155,30 @@
 
         </li>
 
+
+        <!-- ================= LANGUAGE ================= -->
+
+        <li class="nav-item ms-lg-2">
+
+          <select
+            class="form-select form-select-sm language-selector"
+            [value]="selectedLanguage"
+            (change)="changeLanguage($any($event.target).value)"
+            aria-label="Select language">
+
+            <option
+              *ngFor="let language of languages"
+              [value]="language.code">
+
+              {{ language.label }}
+
+            </option>
+
+          </select>
+
+        </li>
+
+
       </ul>
 
     </div>
