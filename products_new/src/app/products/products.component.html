@@ -1,11 +1,10 @@
 <div class="products-page">
 
   <!-- Cart Success Message -->
-  <div
-    class="cart-message"
-    *ngIf="cartMessage">
+  <div class="cart-message" *ngIf="cartMessage">
 
-    <span class="success-icon">
+    <span class="
+    -icon">
       {{ finalContent?.['icons']?.['success'] }}
     </span>
 
@@ -35,25 +34,6 @@
 
     </div>
 
-
-    <!-- Search -->
-    <!--
-    <div class="product-search">
-
-      <span class="search-icon">
-        {{ finalContent?.['icons']?.['search'] }}
-      </span>
-
-      <input
-        type="text"
-        [placeholder]="
-          finalContent?.['header']?.['searchPlaceholder']
-        "
-      />
-
-    </div>
-    -->
-
   </section>
 
 
@@ -80,9 +60,7 @@
 
 
   <!-- No Products Found -->
-  <div
-    class="no-products"
-    *ngIf="
+  <div class="no-products" *ngIf="
       searchText &&
       products.length === 0
     ">
@@ -104,21 +82,14 @@
 
 
   <!-- Product Grid -->
-  <section
-    class="product-grid"
-    *ngIf="products.length > 0">
+  <section class="product-grid" *ngIf="products.length > 0">
 
-    <div
-      class="product-card"
-      *ngFor="let product of products">
+    <div class="product-card" *ngFor="let product of products">
 
       <!-- Product Image -->
       <div class="product-image-wrapper">
 
-        <img
-          [src]="product.image"
-          [alt]="product.title"
-        />
+        <img [src]="product.image" [alt]="product.title" />
 
         <span class="category-badge">
           {{ product.category }}
@@ -170,10 +141,7 @@
           </div>
 
 
-          <button
-            type="button"
-            class="add-cart-btn"
-            (click)="addToCart(product)">
+          <button type="button" class="add-cart-btn" (click)="addToCart(product)">
 
             <span>
               {{ finalContent?.['icons']?.['cart'] }}
